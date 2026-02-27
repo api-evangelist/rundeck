@@ -1,0 +1,55 @@
+name: Rundeck
+description: Rundeck is an open source automation service with a web console, command line tools and a WebAPI. It lets you easily run automation tasks across a set of nodes.
+image: https://www.rundeck.com/hubfs/Assets/Images/logos/rundeck-logo-black.png
+tags:
+- automation
+- orchestration
+- job scheduling
+- workflow
+- devops
+created: '2024'
+modified: '2024'
+url: https://www.rundeck.com
+specificationVersion: '0.18'
+apis:
+- name: Rundeck API
+  description: The Rundeck API provides access to job execution, project management, node management, and other automation capabilities
+  image: https://www.rundeck.com/hubfs/Assets/Images/logos/rundeck-logo-black.png
+  humanURL: https://docs.rundeck.com/docs/api/
+  baseURL: http://localhost:4440/api
+  tags:
+  - automation
+  - jobs
+  - execution
+  - projects
+  - nodes
+  properties:
+  - type: Documentation
+    url: https://docs.rundeck.com/docs/api/
+  - type: OpenAPI
+    url: https://docs.rundeck.com/docs/api/rundeck-api.yaml
+  - type: Authentication
+    url: https://docs.rundeck.com/docs/api/#authentication
+  - type: Versioning
+    url: https://docs.rundeck.com/docs/api/#api-versioning
+  contact:
+  - FN: Rundeck Support
+    email: support@rundeck.com
+    url: https://www.rundeck.com/support
+common:
+- type: Website
+  url: https://www.rundeck.com
+- type: Documentation
+  url: https://docs.rundeck.com
+- type: GitHub
+  url: https://github.com/rundeck/rundeck
+- type: Blog
+  url: https://www.rundeck.com/blog
+- type: Community
+  url: https://community.rundeck.com
+- type: Download
+  url: https://www.rundeck.com/downloads
+maintainers:
+- FN: Rundeck Team
+  email: info@rundeck.com
+  url: https://www.rundeck.com
