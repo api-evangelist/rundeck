@@ -38,6 +38,12 @@ The Rundeck REST API (version 58) provides programmatic access to job execution,
 - [Authentication](https://docs.rundeck.com/docs/api/#authentication)
 - [Versioning](https://docs.rundeck.com/docs/api/#api-versioning)
 - [GitHub Repository](https://github.com/rundeck/rundeck-api-specs)
+- [Spectral Rules](rules/rundeck-rules.yml)
+- [Vocabulary](vocabulary/rundeck-vocabulary.yml)
+- [JSON Schema](json-schema/rundeck-job-schema.json)
+- [JSON Structure](json-structure/rundeck-job-structure.json)
+- [JSON-LD](json-ld/rundeck-context.jsonld)
+- [Naftiko Capability](capabilities/runbook-automation.yaml)
 
 ## Spectral Rules
 
