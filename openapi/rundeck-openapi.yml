@@ -1,0 +1,1294 @@
+openapi: 3.1.0
+info:
+  title: Rundeck API
+  description: >-
+    The Rundeck REST API provides programmatic access to all Rundeck functionality
+    including job management, execution control, project administration, node management,
+    user management, ACL policies, system administration, and cluster operations.
+    The current API version is 58. Rundeck is an open source runbook automation service
+    developed by PagerDuty that enables IT teams to run automation tasks across nodes,
+    manage self-service operations, and maintain execution history.
+  version: '58'
+  contact:
+    name: Rundeck Support
+    url: https://www.rundeck.com/support
+    email: support@rundeck.com
+  termsOfService: https://www.rundeck.com/terms-of-service
+  license:
+    name: Apache 2.0
+    url: https://github.com/rundeck/rundeck/blob/main/LICENSE
+externalDocs:
+  description: Rundeck API Documentation
+  url: https://docs.rundeck.com/docs/api/
+servers:
+  - url: http://localhost:4440/api/58
+    description: Local Rundeck Instance (Version 58)
+  - url: https://your-rundeck-server.example.com/api/58
+    description: Production Rundeck Instance
+security:
+  - tokenAuth: []
+tags:
+  - name: Jobs
+    description: >-
+      List, create, import, export, run, and delete automation jobs.
+  - name: Executions
+    description: >-
+      Monitor running executions, retrieve execution history, and manage execution state.
+  - name: Projects
+    description: >-
+      Create and manage Rundeck projects which organize jobs and node configurations.
+  - name: Nodes
+    description: >-
+      Query and manage nodes (target machines) associated with Rundeck projects.
+  - name: System
+    description: >-
+      Access system information, health checks, execution modes, metrics, and configuration.
+  - name: Users
+    description: >-
+      Manage user profiles, roles, and API token generation.
+  - name: Tokens
+    description: >-
+      Create, list, and delete API authentication tokens.
+  - name: ACL Policies
+    description: >-
+      Manage Access Control List (ACL) policies for fine-grained permission control.
+  - name: Log Storage
+    description: >-
+      Monitor and manage execution log storage and retrieval.
+paths:
+  /projects:
+    get:
+      operationId: listProjects
+      summary: List All Projects
+      description: >-
+        Returns a list of all projects that the authenticated user has access to.
+      tags:
+        - Projects
+      responses:
+        '200':
+          description: List of projects
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Project'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      operationId: createProject
+      summary: Create a Project
+      description: >-
+        Creates a new Rundeck project with the specified name and configuration.
+      tags:
+        - Projects
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateProjectRequest'
+      responses:
+        '201':
+          description: Project created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '409':
+          description: Project already exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /project/{project}:
+    get:
+      operationId: getProject
+      summary: Get Project Info
+      description: >-
+        Returns information about a specific project including name, description, and configuration.
+      tags:
+        - Projects
+      parameters:
+        - $ref: '#/components/parameters/ProjectName'
+      responses:
+        '200':
+          description: Project details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      operationId: deleteProject
+      summary: Delete a Project
+      description: >-
+        Permanently deletes a project and all of its associated jobs, executions, and configuration.
+      tags:
+        - Projects
+      parameters:
+        - $ref: '#/components/parameters/ProjectName'
+      responses:
+        '204':
+          description: Project deleted successfully
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /project/{project}/jobs:
+    get:
+      operationId: listJobs
+      summary: List Jobs for a Project
+      description: >-
+        Returns a list of all jobs in the specified project. Can be filtered by group path,
+        job name, or specific job IDs.
+      tags:
+        - Jobs
+      parameters:
+        - $ref: '#/components/parameters/ProjectName'
+        - name: idList
+          in: query
+          description: Comma-separated list of Job IDs to include
+          schema:
+            type: string
+        - name: groupPath
+          in: query
+          description: Group or partial group path to filter jobs. Use "-" for top-level jobs only.
+          schema:
+            type: string
+            default: '*'
+        - name: jobFilter
+          in: query
+          description: Filter by job name (substring match)
+          schema:
+            type: string
+        - name: jobExactFilter
+          in: query
+          description: Exact job name to match
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of jobs
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Job'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /project/{project}/run/command:
+    post:
+      operationId: runAdHocCommand
+      summary: Run an Ad Hoc Command
+      description: >-
+        Runs an ad hoc command on nodes in the specified project without requiring a
+        pre-defined job.
+      tags:
+        - Executions
+      parameters:
+        - $ref: '#/components/parameters/ProjectName'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdHocCommandRequest'
+      responses:
+        '200':
+          description: Command execution started
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExecutionReference'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /job/{id}:
+    get:
+      operationId: getJobDefinition
+      summary: Get Job Definition
+      description: >-
+        Retrieves the definition and configuration of a specific job by its unique ID.
+      tags:
+        - Jobs
+      parameters:
+        - $ref: '#/components/parameters/JobId'
+      responses:
+        '200':
+          description: Job definition
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Job'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      operationId: deleteJob
+      summary: Delete a Job
+      description: >-
+        Permanently deletes a job by its unique ID.
+      tags:
+        - Jobs
+      parameters:
+        - $ref: '#/components/parameters/JobId'
+      responses:
+        '204':
+          description: Job deleted successfully
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /job/{id}/executions:
+    get:
+      operationId: listJobExecutions
+      summary: List Job Executions
+      description: >-
+        Returns a list of executions for a specific job, with optional filtering by status.
+      tags:
+        - Jobs
+        - Executions
+      parameters:
+        - $ref: '#/components/parameters/JobId'
+        - name: status
+          in: query
+          description: Filter executions by status
+          schema:
+            type: string
+            enum:
+              - running
+              - succeeded
+              - failed
+              - aborted
+        - name: max
+          in: query
+          description: Maximum number of results to return
+          schema:
+            type: integer
+            default: 20
+        - name: offset
+          in: query
+          description: Offset for pagination
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: List of executions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExecutionList'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    post:
+      operationId: runJob
+      summary: Run a Job
+      description: >-
+        Triggers a new execution of the specified job with optional arguments, node filter,
+        and execution options.
+      tags:
+        - Jobs
+        - Executions
+      parameters:
+        - $ref: '#/components/parameters/JobId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RunJobRequest'
+      responses:
+        '200':
+          description: Job execution started
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Execution'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /execution/{id}:
+    get:
+      operationId: getExecution
+      summary: Get Execution Status
+      description: >-
+        Returns the current status and details of an execution by its unique ID.
+        Use this to poll for completion of asynchronously started jobs.
+      tags:
+        - Executions
+      parameters:
+        - $ref: '#/components/parameters/ExecutionId'
+      responses:
+        '200':
+          description: Execution status and details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Execution'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      operationId: deleteExecution
+      summary: Delete an Execution
+      description: >-
+        Deletes an execution record by its unique ID.
+      tags:
+        - Executions
+      parameters:
+        - $ref: '#/components/parameters/ExecutionId'
+      responses:
+        '204':
+          description: Execution deleted
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          description: Forbidden - execution is currently running
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /execution/{id}/abort:
+    post:
+      operationId: abortExecution
+      summary: Abort an Execution
+      description: >-
+        Aborts a currently running execution. The execution will transition to aborted status.
+      tags:
+        - Executions
+      parameters:
+        - $ref: '#/components/parameters/ExecutionId'
+      responses:
+        '200':
+          description: Abort request submitted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbortResult'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /execution/{id}/output:
+    get:
+      operationId: getExecutionOutput
+      summary: Get Execution Output Log
+      description: >-
+        Returns the log output for an execution in real-time or after completion.
+        Supports streaming via offset parameter for tailing live executions.
+      tags:
+        - Executions
+      parameters:
+        - $ref: '#/components/parameters/ExecutionId'
+        - name: offset
+          in: query
+          description: Byte offset to read from
+          schema:
+            type: integer
+            default: 0
+        - name: lastlines
+          in: query
+          description: Number of lines from end of log
+          schema:
+            type: integer
+        - name: format
+          in: query
+          description: Output format
+          schema:
+            type: string
+            enum:
+              - text
+              - json
+      responses:
+        '200':
+          description: Execution log output
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExecutionOutput'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /project/{project}/executions:
+    get:
+      operationId: listProjectExecutions
+      summary: List Project Executions
+      description: >-
+        Returns executions across all jobs in a project with optional filtering.
+      tags:
+        - Projects
+        - Executions
+      parameters:
+        - $ref: '#/components/parameters/ProjectName'
+        - name: status
+          in: query
+          description: Filter by execution status
+          schema:
+            type: string
+            enum:
+              - running
+              - succeeded
+              - failed
+              - aborted
+        - name: max
+          in: query
+          description: Maximum results per page
+          schema:
+            type: integer
+            default: 20
+        - name: offset
+          in: query
+          description: Pagination offset
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: List of executions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExecutionList'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /project/{project}/nodes:
+    get:
+      operationId: listProjectNodes
+      summary: List Project Nodes
+      description: >-
+        Returns a list of nodes associated with the project that match the optional filter.
+      tags:
+        - Nodes
+      parameters:
+        - $ref: '#/components/parameters/ProjectName'
+        - name: filter
+          in: query
+          description: Node filter expression (e.g., "name: webserver")
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Map of nodes keyed by node name
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  $ref: '#/components/schemas/Node'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /system/info:
+    get:
+      operationId: getSystemInfo
+      summary: Get System Info
+      description: >-
+        Returns system information about the Rundeck server including version, uptime,
+        OS details, and JVM information.
+      tags:
+        - System
+      responses:
+        '200':
+          description: System information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SystemInfo'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /system/executions/status:
+    get:
+      operationId: getExecutionMode
+      summary: Get Execution Mode
+      description: >-
+        Returns the current execution mode of the Rundeck server (active or passive).
+        In passive mode, job executions are suspended.
+      tags:
+        - System
+      responses:
+        '200':
+          description: Current execution mode
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExecutionMode'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /system/executions/enable:
+    post:
+      operationId: enableExecutions
+      summary: Enable Executions
+      description: >-
+        Sets the Rundeck server to active execution mode, allowing job executions to run.
+      tags:
+        - System
+      responses:
+        '200':
+          description: Executions enabled
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExecutionMode'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /system/executions/disable:
+    post:
+      operationId: disableExecutions
+      summary: Disable Executions
+      description: >-
+        Sets the Rundeck server to passive mode, preventing new job executions from starting.
+      tags:
+        - System
+      responses:
+        '200':
+          description: Executions disabled
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExecutionMode'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /tokens:
+    get:
+      operationId: listTokens
+      summary: List API Tokens
+      description: >-
+        Returns all API tokens for the authenticated user or, if admin, for all users.
+      tags:
+        - Tokens
+      parameters:
+        - name: user
+          in: query
+          description: Filter tokens by username (admin only)
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of API tokens
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Token'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      operationId: createToken
+      summary: Create an API Token
+      description: >-
+        Creates a new API token for the specified user with optional roles and expiration.
+      tags:
+        - Tokens
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTokenRequest'
+      responses:
+        '201':
+          description: Token created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Token'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /token/{id}:
+    get:
+      operationId: getToken
+      summary: Get API Token
+      description: >-
+        Returns details of a specific API token by its ID.
+      tags:
+        - Tokens
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Token details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Token'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      operationId: deleteToken
+      summary: Delete an API Token
+      description: >-
+        Permanently deletes an API token by its ID.
+      tags:
+        - Tokens
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Token deleted
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /user/list:
+    get:
+      operationId: listUsers
+      summary: List Users
+      description: >-
+        Returns a list of all Rundeck users (admin only).
+      tags:
+        - Users
+      responses:
+        '200':
+          description: List of users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /user/info:
+    get:
+      operationId: getCurrentUserInfo
+      summary: Get Current User Info
+      description: >-
+        Returns profile information for the currently authenticated user.
+      tags:
+        - Users
+      responses:
+        '200':
+          description: Current user profile
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      operationId: updateCurrentUserInfo
+      summary: Update Current User Info
+      description: >-
+        Updates profile information for the currently authenticated user.
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserUpdateRequest'
+      responses:
+        '200':
+          description: Updated user profile
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /project/{project}/acl/{path}:
+    get:
+      operationId: getProjectAclPolicy
+      summary: Get Project ACL Policy
+      description: >-
+        Returns the ACL policy document at the specified path within a project.
+      tags:
+        - ACL Policies
+      parameters:
+        - $ref: '#/components/parameters/ProjectName'
+        - name: path
+          in: path
+          required: true
+          description: Path to the ACL policy file
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ACL policy document
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AclPolicy'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      operationId: setProjectAclPolicy
+      summary: Set Project ACL Policy
+      description: >-
+        Creates or replaces an ACL policy document at the specified path within a project.
+      tags:
+        - ACL Policies
+      parameters:
+        - $ref: '#/components/parameters/ProjectName'
+        - name: path
+          in: path
+          required: true
+          description: Path to the ACL policy file
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/yaml:
+            schema:
+              type: string
+      responses:
+        '200':
+          description: ACL policy updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AclPolicy'
+        '201':
+          description: ACL policy created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AclPolicy'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+components:
+  securitySchemes:
+    tokenAuth:
+      type: apiKey
+      in: header
+      name: X-Rundeck-Auth-Token
+      description: >-
+        API token for authentication. Obtain tokens from the Rundeck web interface under
+        User Profile > User API Tokens or via the /api/V/tokens endpoint.
+  parameters:
+    ProjectName:
+      name: project
+      in: path
+      required: true
+      description: The name of the Rundeck project
+      schema:
+        type: string
+    JobId:
+      name: id
+      in: path
+      required: true
+      description: The unique ID of the job
+      schema:
+        type: string
+    ExecutionId:
+      name: id
+      in: path
+      required: true
+      description: The unique ID of the execution
+      schema:
+        type: string
+  responses:
+    Unauthorized:
+      description: Unauthorized - invalid or missing API token
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    BadRequest:
+      description: Bad request - invalid parameters
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+  schemas:
+    Project:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The unique name of the project
+        description:
+          type: string
+          description: A description of the project
+        url:
+          type: string
+          format: uri
+          description: Self-link URL for this project resource
+        config:
+          type: object
+          description: Project configuration key-value properties
+          additionalProperties:
+            type: string
+    CreateProjectRequest:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          description: The name for the new project
+        description:
+          type: string
+          description: Optional description for the project
+        config:
+          type: object
+          description: Initial project configuration
+          additionalProperties:
+            type: string
+    Job:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique job ID (UUID)
+        name:
+          type: string
+          description: The job name
+        group:
+          type: string
+          description: The job group path (e.g., "ops/deploy")
+        project:
+          type: string
+          description: The project this job belongs to
+        description:
+          type: string
+          description: Job description
+        href:
+          type: string
+          format: uri
+          description: API self-link URL
+        permalink:
+          type: string
+          format: uri
+          description: Web UI permalink
+        scheduled:
+          type: boolean
+          description: Whether the job has a schedule
+        scheduleEnabled:
+          type: boolean
+          description: Whether the schedule is active
+        enabled:
+          type: boolean
+          description: Whether the job is enabled
+        averageDuration:
+          type: integer
+          description: Average execution duration in milliseconds
+    RunJobRequest:
+      type: object
+      properties:
+        argString:
+          type: string
+          description: Job argument string (e.g., "-option1 value1 -option2 value2")
+        loglevel:
+          type: string
+          description: Override log level for this execution
+          enum:
+            - DEBUG
+            - VERBOSE
+            - INFO
+            - WARN
+            - ERROR
+        asUser:
+          type: string
+          description: Run as this user (requires admin)
+        filter:
+          type: string
+          description: Node filter expression to override job's default nodes
+        runAtTime:
+          type: string
+          format: date-time
+          description: Schedule this execution for a future time
+    AdHocCommandRequest:
+      type: object
+      required:
+        - exec
+      properties:
+        exec:
+          type: string
+          description: The command to execute on target nodes
+        filter:
+          type: string
+          description: Node filter expression
+        loglevel:
+          type: string
+          description: Log level for the command execution
+          enum:
+            - DEBUG
+            - VERBOSE
+            - INFO
+            - WARN
+            - ERROR
+    Execution:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Execution ID
+        href:
+          type: string
+          format: uri
+          description: API self-link
+        permalink:
+          type: string
+          format: uri
+          description: Web UI permalink
+        status:
+          type: string
+          description: Current execution status
+          enum:
+            - running
+            - succeeded
+            - failed
+            - aborted
+            - timedout
+            - failed-with-retry
+            - scheduled
+        project:
+          type: string
+          description: Project name
+        user:
+          type: string
+          description: User who triggered the execution
+        dateStarted:
+          type: object
+          properties:
+            unixtime:
+              type: integer
+            date:
+              type: string
+              format: date-time
+        dateEnded:
+          type: object
+          properties:
+            unixtime:
+              type: integer
+            date:
+              type: string
+              format: date-time
+        job:
+          $ref: '#/components/schemas/JobReference'
+        description:
+          type: string
+        argstring:
+          type: string
+        serverUUID:
+          type: string
+    ExecutionReference:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Execution ID
+        permalink:
+          type: string
+          format: uri
+        href:
+          type: string
+          format: uri
+        status:
+          type: string
+    ExecutionList:
+      type: object
+      properties:
+        paging:
+          type: object
+          properties:
+            count:
+              type: integer
+            total:
+              type: integer
+            offset:
+              type: integer
+            max:
+              type: integer
+        executions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Execution'
+    ExecutionOutput:
+      type: object
+      properties:
+        id:
+          type: string
+        offset:
+          type: string
+        completed:
+          type: boolean
+        execCompleted:
+          type: boolean
+        hasFailedNodes:
+          type: boolean
+        execState:
+          type: string
+        lastModified:
+          type: string
+        execDuration:
+          type: integer
+        entries:
+          type: array
+          items:
+            type: object
+            properties:
+              time:
+                type: string
+              level:
+                type: string
+              log:
+                type: string
+              user:
+                type: string
+              node:
+                type: string
+    AbortResult:
+      type: object
+      properties:
+        abort:
+          type: object
+          properties:
+            status:
+              type: string
+              enum:
+                - aborted
+                - failed
+                - pending
+            reason:
+              type: string
+        execution:
+          $ref: '#/components/schemas/ExecutionReference'
+    JobReference:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        group:
+          type: string
+        project:
+          type: string
+        href:
+          type: string
+          format: uri
+        permalink:
+          type: string
+          format: uri
+    Node:
+      type: object
+      properties:
+        nodename:
+          type: string
+          description: The node name (hostname or alias)
+        hostname:
+          type: string
+          description: The hostname or IP address
+        username:
+          type: string
+          description: Default username for SSH
+        description:
+          type: string
+          description: Node description
+        tags:
+          type: string
+          description: Comma-separated list of tags
+        osFamily:
+          type: string
+          description: OS family (unix, windows)
+        osName:
+          type: string
+          description: OS name
+        osArch:
+          type: string
+          description: OS architecture
+        osVersion:
+          type: string
+          description: OS version
+    SystemInfo:
+      type: object
+      properties:
+        system:
+          type: object
+          properties:
+            timestamp:
+              type: object
+              properties:
+                epoch:
+                  type: integer
+                unit:
+                  type: string
+                datetime:
+                  type: string
+                  format: date-time
+            rundeck:
+              type: object
+              properties:
+                version:
+                  type: string
+                build:
+                  type: string
+                node:
+                  type: string
+                base:
+                  type: string
+                apiversion:
+                  type: integer
+                serverUUID:
+                  type: string
+            os:
+              type: object
+              properties:
+                arch:
+                  type: string
+                name:
+                  type: string
+                version:
+                  type: string
+    ExecutionMode:
+      type: object
+      properties:
+        executionMode:
+          type: string
+          enum:
+            - active
+            - passive
+          description: Current execution mode of the server
+    Token:
+      type: object
+      properties:
+        user:
+          type: string
+          description: Username the token belongs to
+        id:
+          type: string
+          description: Token ID
+        token:
+          type: string
+          description: The actual token value (only shown at creation)
+        roles:
+          type: array
+          items:
+            type: string
+          description: Roles assigned to this token
+        expiration:
+          type: string
+          format: date-time
+          description: Token expiration time (null if no expiration)
+        expired:
+          type: boolean
+        creator:
+          type: string
+    CreateTokenRequest:
+      type: object
+      required:
+        - user
+      properties:
+        user:
+          type: string
+          description: Username for the token
+        roles:
+          type: array
+          items:
+            type: string
+          description: Roles to assign to the token
+        duration:
+          type: string
+          description: Token duration (e.g., "30d", "1y")
+    User:
+      type: object
+      properties:
+        login:
+          type: string
+          description: Username
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+          format: email
+        created:
+          type: string
+          format: date-time
+        updated:
+          type: string
+          format: date-time
+        lastJob:
+          type: string
+          format: date-time
+        tokens:
+          type: integer
+          description: Number of API tokens for this user
+    UserUpdateRequest:
+      type: object
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+          format: email
+    AclPolicy:
+      type: object
+      properties:
+        path:
+          type: string
+          description: Path to the ACL policy file
+        href:
+          type: string
+          format: uri
+        contents:
+          type: string
+          description: YAML content of the ACL policy
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: boolean
+          description: Always true for error responses
+        errorCode:
+          type: string
+          description: Machine-readable error code
+        message:
+          type: string
+          description: Human-readable error message
+        apiversion:
+          type: integer
+          description: API version that produced this response

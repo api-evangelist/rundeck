@@ -1,0 +1,125 @@
+{
+  "name": "Rundeck Job",
+  "description": "Structure of a Rundeck automation job and its execution model",
+  "fields": [
+    {
+      "name": "id",
+      "type": "string (UUID)",
+      "required": true,
+      "description": "Unique job identifier"
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "required": true,
+      "description": "Job name, unique within group and project"
+    },
+    {
+      "name": "group",
+      "type": "string",
+      "required": false,
+      "description": "Hierarchical group path (e.g., 'ops/deploy')"
+    },
+    {
+      "name": "project",
+      "type": "string",
+      "required": true,
+      "description": "Owning project name"
+    },
+    {
+      "name": "description",
+      "type": "string",
+      "required": false,
+      "description": "Human-readable job description"
+    },
+    {
+      "name": "href",
+      "type": "string (URI)",
+      "required": false,
+      "description": "API self-link URL"
+    },
+    {
+      "name": "permalink",
+      "type": "string (URI)",
+      "required": false,
+      "description": "Web UI permalink"
+    },
+    {
+      "name": "scheduled",
+      "type": "boolean",
+      "required": false,
+      "description": "Has a schedule configured"
+    },
+    {
+      "name": "scheduleEnabled",
+      "type": "boolean",
+      "required": false,
+      "description": "Schedule is currently active"
+    },
+    {
+      "name": "enabled",
+      "type": "boolean",
+      "required": false,
+      "description": "Job is enabled for execution",
+      "default": true
+    },
+    {
+      "name": "averageDuration",
+      "type": "integer (ms)",
+      "required": false,
+      "description": "Average execution duration in milliseconds"
+    },
+    {
+      "name": "options",
+      "type": "array of JobOption",
+      "required": false,
+      "description": "Input parameters for the job",
+      "nested": [
+        {
+          "name": "name",
+          "type": "string",
+          "required": true,
+          "description": "Option name used in argument string"
+        },
+        {
+          "name": "required",
+          "type": "boolean",
+          "required": false,
+          "description": "Whether option must be provided"
+        },
+        {
+          "name": "defaultValue",
+          "type": "string",
+          "required": false,
+          "description": "Default value if not provided"
+        },
+        {
+          "name": "secure",
+          "type": "boolean",
+          "required": false,
+          "description": "Masked/secret option value"
+        },
+        {
+          "name": "values",
+          "type": "array of string",
+          "required": false,
+          "description": "Allowed values enumeration"
+        }
+      ]
+    }
+  ],
+  "relationships": [
+    {
+      "name": "belongs_to",
+      "target": "Project",
+      "cardinality": "many-to-one",
+      "description": "A job belongs to exactly one Rundeck project"
+    },
+    {
+      "name": "has_executions",
+      "target": "Execution",
+      "cardinality": "one-to-many",
+      "description": "A job can have many execution instances"
+    }
+  ]
+}

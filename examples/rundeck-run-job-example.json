@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "POST",
+    "url": "http://localhost:4440/api/58/job/a9e8e00e-9f3b-4b8e-9c2a-f1234567890a/executions",
+    "headers": {
+      "X-Rundeck-Auth-Token": "YOUR_API_TOKEN",
+      "Content-Type": "application/json",
+      "Accept": "application/json"
+    },
+    "body": {
+      "argString": "-environment production -version 2.1.0",
+      "loglevel": "INFO",
+      "filter": "tags: webserver"
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "id": 42,
+      "href": "http://localhost:4440/api/58/execution/42",
+      "permalink": "http://localhost:4440/project/MyProject/execution/show/42",
+      "status": "running",
+      "project": "MyProject",
+      "user": "admin",
+      "dateStarted": {
+        "unixtime": 1746172800000,
+        "date": "2026-05-02T12:00:00Z"
+      },
+      "job": {
+        "id": "a9e8e00e-9f3b-4b8e-9c2a-f1234567890a",
+        "name": "Deploy Application",
+        "group": "ops/deploy",
+        "project": "MyProject",
+        "href": "http://localhost:4440/api/58/job/a9e8e00e-9f3b-4b8e-9c2a-f1234567890a",
+        "permalink": "http://localhost:4440/project/MyProject/job/show/a9e8e00e-9f3b-4b8e-9c2a-f1234567890a"
+      },
+      "argstring": "-environment production -version 2.1.0",
+      "description": "Deploy Application"
+    }
+  }
+}

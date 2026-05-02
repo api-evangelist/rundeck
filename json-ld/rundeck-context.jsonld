@@ -1,0 +1,110 @@
+{
+  "@context": {
+    "@version": 1.1,
+    "rundeck": "https://rundeck.com/vocab/",
+    "schema": "https://schema.org/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "dcterms": "http://purl.org/dc/terms/",
+
+    "Job": {
+      "@id": "rundeck:Job",
+      "@context": {
+        "id": "schema:identifier",
+        "name": "schema:name",
+        "group": "rundeck:jobGroup",
+        "project": "rundeck:projectName",
+        "description": "schema:description",
+        "href": {
+          "@id": "schema:url",
+          "@type": "@id"
+        },
+        "permalink": {
+          "@id": "schema:sameAs",
+          "@type": "@id"
+        },
+        "scheduled": "rundeck:isScheduled",
+        "scheduleEnabled": "rundeck:scheduleEnabled",
+        "enabled": "rundeck:isEnabled",
+        "averageDuration": "rundeck:averageDuration",
+        "options": "rundeck:jobOptions",
+        "loglevel": "rundeck:logLevel"
+      }
+    },
+
+    "Execution": {
+      "@id": "rundeck:Execution",
+      "@context": {
+        "id": "schema:identifier",
+        "status": "rundeck:executionStatus",
+        "project": "rundeck:projectName",
+        "user": "schema:agent",
+        "dateStarted": {
+          "@id": "schema:startTime",
+          "@type": "xsd:dateTime"
+        },
+        "dateEnded": {
+          "@id": "schema:endTime",
+          "@type": "xsd:dateTime"
+        },
+        "argstring": "rundeck:argumentString",
+        "serverUUID": "rundeck:serverNode",
+        "href": {
+          "@id": "schema:url",
+          "@type": "@id"
+        }
+      }
+    },
+
+    "Project": {
+      "@id": "rundeck:Project",
+      "@context": {
+        "name": "schema:name",
+        "description": "schema:description",
+        "url": {
+          "@id": "schema:url",
+          "@type": "@id"
+        },
+        "config": "rundeck:projectConfig"
+      }
+    },
+
+    "Node": {
+      "@id": "rundeck:Node",
+      "@context": {
+        "nodename": "schema:name",
+        "hostname": "schema:domainIncludes",
+        "username": "rundeck:sshUsername",
+        "description": "schema:description",
+        "tags": "schema:keywords",
+        "osFamily": "rundeck:osFamily",
+        "osName": "rundeck:osName",
+        "osArch": "rundeck:osArchitecture",
+        "osVersion": "rundeck:osVersion"
+      }
+    },
+
+    "Token": {
+      "@id": "rundeck:ApiToken",
+      "@context": {
+        "id": "schema:identifier",
+        "user": "schema:agent",
+        "roles": "rundeck:tokenRoles",
+        "expiration": {
+          "@id": "schema:expires",
+          "@type": "xsd:dateTime"
+        },
+        "expired": "rundeck:isExpired",
+        "creator": "rundeck:tokenCreator"
+      }
+    },
+
+    "SystemInfo": {
+      "@id": "rundeck:SystemInfo",
+      "@context": {
+        "version": "schema:version",
+        "node": "schema:name",
+        "serverUUID": "schema:identifier"
+      }
+    }
+  }
+}

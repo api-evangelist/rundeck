@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "http://localhost:4440/api/58/project/MyProject/jobs",
+    "headers": {
+      "X-Rundeck-Auth-Token": "YOUR_API_TOKEN",
+      "Accept": "application/json"
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "body": [
+      {
+        "id": "a9e8e00e-9f3b-4b8e-9c2a-f1234567890a",
+        "name": "Deploy Application",
+        "group": "ops/deploy",
+        "project": "MyProject",
+        "description": "Deploys the application to the target environment",
+        "href": "http://localhost:4440/api/58/job/a9e8e00e-9f3b-4b8e-9c2a-f1234567890a",
+        "permalink": "http://localhost:4440/project/MyProject/job/show/a9e8e00e-9f3b-4b8e-9c2a-f1234567890a",
+        "scheduled": true,
+        "scheduleEnabled": true,
+        "enabled": true,
+        "averageDuration": 45000
+      },
+      {
+        "id": "b1c2d3e4-5678-90ab-cdef-123456789012",
+        "name": "Database Backup",
+        "group": "ops/database",
+        "project": "MyProject",
+        "description": "Creates a full database backup and uploads to S3",
+        "href": "http://localhost:4440/api/58/job/b1c2d3e4-5678-90ab-cdef-123456789012",
+        "permalink": "http://localhost:4440/project/MyProject/job/show/b1c2d3e4-5678-90ab-cdef-123456789012",
+        "scheduled": true,
+        "scheduleEnabled": true,
+        "enabled": true,
+        "averageDuration": 120000
+      }
+    ]
+  }
+}

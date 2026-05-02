@@ -1,0 +1,191 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rundeck.com/schemas/rundeck/job.json",
+  "title": "Rundeck Job",
+  "description": "Represents an automation job in Rundeck. Jobs define the steps to execute, target nodes, schedule, and access control. Jobs are organized within projects and can be triggered manually, via API, schedule, or webhook.",
+  "type": "object",
+  "required": ["id", "name", "project"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Unique job identifier (UUID)."
+    },
+    "name": {
+      "type": "string",
+      "description": "The job name. Must be unique within its group and project.",
+      "minLength": 1
+    },
+    "group": {
+      "type": "string",
+      "description": "The job group path using forward slashes (e.g., 'ops/deploy'). Used for organizing jobs hierarchically."
+    },
+    "project": {
+      "type": "string",
+      "description": "The name of the Rundeck project that owns this job.",
+      "minLength": 1
+    },
+    "description": {
+      "type": "string",
+      "description": "Human-readable description of what this job does."
+    },
+    "href": {
+      "type": "string",
+      "format": "uri",
+      "description": "API self-link URL for this job resource."
+    },
+    "permalink": {
+      "type": "string",
+      "format": "uri",
+      "description": "Web UI permalink to view this job."
+    },
+    "scheduled": {
+      "type": "boolean",
+      "description": "Whether this job has a schedule configured."
+    },
+    "scheduleEnabled": {
+      "type": "boolean",
+      "description": "Whether the job's schedule is currently active."
+    },
+    "enabled": {
+      "type": "boolean",
+      "description": "Whether the job is enabled and can be executed.",
+      "default": true
+    },
+    "averageDuration": {
+      "type": "integer",
+      "description": "Average execution duration in milliseconds based on recent executions.",
+      "minimum": 0
+    },
+    "options": {
+      "type": "array",
+      "description": "Job input options (parameters) that can be supplied at runtime.",
+      "items": {
+        "$ref": "#/$defs/JobOption"
+      }
+    },
+    "nodeFilterEditable": {
+      "type": "boolean",
+      "description": "Whether the node filter can be overridden at execution time."
+    },
+    "loglevel": {
+      "type": "string",
+      "description": "Default log level for job executions.",
+      "enum": ["DEBUG", "VERBOSE", "INFO", "WARN", "ERROR"]
+    }
+  },
+  "$defs": {
+    "JobOption": {
+      "type": "object",
+      "description": "An input option for a Rundeck job, allowing parameterization of job executions.",
+      "required": ["name"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "The option name used in the argument string."
+        },
+        "description": {
+          "type": "string",
+          "description": "Human-readable description of this option."
+        },
+        "required": {
+          "type": "boolean",
+          "description": "Whether this option must be provided.",
+          "default": false
+        },
+        "defaultValue": {
+          "type": "string",
+          "description": "Default value if none is provided."
+        },
+        "type": {
+          "type": "string",
+          "description": "Option data type.",
+          "enum": ["text", "file"]
+        },
+        "secure": {
+          "type": "boolean",
+          "description": "Whether this is a secure/password option (value is masked in logs).",
+          "default": false
+        },
+        "values": {
+          "type": "array",
+          "description": "List of allowed values for this option.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "regex": {
+          "type": "string",
+          "description": "Regular expression pattern that input values must match."
+        }
+      }
+    },
+    "Execution": {
+      "type": "object",
+      "description": "Represents a single execution instance of a Rundeck job or ad hoc command.",
+      "required": ["id", "status"],
+      "properties": {
+        "id": {
+          "type": "integer",
+          "description": "Unique execution identifier."
+        },
+        "status": {
+          "type": "string",
+          "description": "Current execution status.",
+          "enum": ["running", "succeeded", "failed", "aborted", "timedout", "failed-with-retry", "scheduled"]
+        },
+        "project": {
+          "type": "string",
+          "description": "Project name for this execution."
+        },
+        "user": {
+          "type": "string",
+          "description": "Username that triggered this execution."
+        },
+        "dateStarted": {
+          "type": "object",
+          "properties": {
+            "unixtime": {
+              "type": "integer",
+              "description": "Unix timestamp in milliseconds."
+            },
+            "date": {
+              "type": "string",
+              "format": "date-time",
+              "description": "ISO 8601 datetime."
+            }
+          }
+        },
+        "dateEnded": {
+          "type": "object",
+          "properties": {
+            "unixtime": {
+              "type": "integer"
+            },
+            "date": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        },
+        "argstring": {
+          "type": "string",
+          "description": "Job argument string used for this execution."
+        },
+        "serverUUID": {
+          "type": "string",
+          "format": "uuid",
+          "description": "UUID of the Rundeck server cluster member that ran this execution."
+        },
+        "href": {
+          "type": "string",
+          "format": "uri"
+        },
+        "permalink": {
+          "type": "string",
+          "format": "uri"
+        }
+      }
+    }
+  }
+}

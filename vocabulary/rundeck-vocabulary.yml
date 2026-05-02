@@ -1,0 +1,144 @@
+name: Rundeck Runbook Automation Vocabulary
+description: >-
+  Core vocabulary, terminology, and domain concepts used in Rundeck runbook
+  automation. Covers job management, execution, node targeting, ACL policies,
+  and DevOps integration patterns.
+created: '2026-05-02'
+modified: '2026-05-02'
+terms:
+
+  - term: Job
+    definition: >-
+      A named, reusable automation workflow in Rundeck that defines a sequence of
+      steps to execute on target nodes. Jobs can be parameterized with options,
+      scheduled, and triggered via API, webhook, or manually.
+    tags:
+      - Job
+      - Automation
+
+  - term: Execution
+    definition: >-
+      A single run instance of a job or ad hoc command. Executions have a lifecycle
+      (running, succeeded, failed, aborted) and record output logs, duration, and
+      targeted nodes.
+    tags:
+      - Execution
+      - Job
+
+  - term: Project
+    definition: >-
+      A logical container in Rundeck that organizes jobs, node configurations,
+      and access control. Projects can model environments (dev, staging, prod) or
+      application teams.
+    tags:
+      - Project
+      - Organization
+
+  - term: Node
+    definition: >-
+      A target machine (physical, virtual, or cloud) registered in Rundeck that
+      jobs can be executed against. Nodes have attributes like hostname, OS type,
+      username, and tags used for filtering.
+    tags:
+      - Node
+      - Infrastructure
+
+  - term: Node Filter
+    definition: >-
+      An expression used to select a subset of nodes to target for job execution.
+      Filters can match on node name, tags, OS, hostname, and custom attributes.
+    tags:
+      - Node
+      - Filtering
+
+  - term: Step
+    definition: >-
+      An individual action within a job definition. Steps can be commands,
+      scripts, job references (call another job), or plugin-provided actions.
+      Steps execute sequentially or in parallel.
+    tags:
+      - Job
+      - Workflow
+
+  - term: Option
+    definition: >-
+      A named input parameter for a job that can be supplied at runtime via
+      the UI, CLI, or API. Options support required/optional, default values,
+      enumeration constraints, and secure (masked) values.
+    tags:
+      - Job
+      - Parameters
+
+  - term: ACL Policy
+    definition: >-
+      Access Control List Policy in Rundeck. YAML-formatted policies that define
+      what actions users and groups can perform on resources (jobs, executions,
+      projects, nodes). Enforces role-based access control.
+    tags:
+      - Security
+      - Access Control
+      - RBAC
+
+  - term: API Token
+    definition: >-
+      A secret string used to authenticate API requests to Rundeck. Tokens are
+      associated with a user and optionally scoped to specific roles. Passed via
+      X-Rundeck-Auth-Token header.
+    tags:
+      - Authentication
+      - API
+      - Security
+
+  - term: Execution Mode
+    definition: >-
+      The operational state of a Rundeck server: active (executions run normally)
+      or passive (executions are suspended for maintenance). Controlled via
+      the system executions API.
+    tags:
+      - System
+      - Administration
+
+  - term: Runbook Automation
+    definition: >-
+      The automation of operational runbooks: documented procedures that IT teams
+      execute to manage systems, deploy software, respond to incidents, and
+      perform routine maintenance.
+    tags:
+      - Runbook
+      - Automation
+      - Operations
+
+  - term: Webhook
+    definition: >-
+      An HTTP callback mechanism in Rundeck that allows external systems to
+      trigger job executions in response to events. Supports authentication tokens
+      and input mapping.
+    tags:
+      - Integration
+      - Webhook
+
+  - term: Log Storage
+    definition: >-
+      The system for storing and retrieving execution output logs. Rundeck supports
+      local file storage and remote storage plugins (S3, Azure Blob, etc.).
+    tags:
+      - Logging
+      - Storage
+
+  - term: Cluster
+    definition: >-
+      A multi-server Rundeck deployment for high availability and load distribution.
+      Cluster members share job scheduling via a distributed database backend.
+    tags:
+      - Cluster
+      - High Availability
+      - Enterprise
+
+  - term: Self-Service Operations
+    definition: >-
+      The practice of enabling non-technical teams to safely execute predefined
+      automation tasks through Rundeck's role-based UI, reducing dependency on
+      infrastructure teams for routine operations.
+    tags:
+      - Operations
+      - Self-Service
