@@ -1,379 +1,658 @@
-naftiko: "1.0.0-alpha1"
-
+naftiko: 1.0.0-alpha2
 info:
-  label: "Rundeck Runbook Automation"
-  description: >-
-    Unified runbook automation capability for Rundeck. Enables DevOps engineers and
-    IT operations teams to trigger automated runbooks, monitor execution status,
-    manage infrastructure nodes, and administer the Rundeck automation platform via
-    a single REST API and MCP server. Covers job execution, monitoring, node management,
-    project organization, and system administration workflows.
+  label: Rundeck Runbook Automation
+  description: Unified runbook automation capability for Rundeck. Enables DevOps engineers and IT operations teams to trigger
+    automated runbooks, monitor execution status, manage infrastructure nodes, and administer the Rundeck automation platform
+    via a single REST API and MCP server. Covers job execution, monitoring, node management, project organization, and system
+    administration workflows.
   tags:
-    - Rundeck
-    - Automation
-    - DevOps
-    - Runbook
-    - IT Operations
-    - Job Scheduling
-    - Orchestration
-  created: "2026-05-02"
-  modified: "2026-05-02"
-
+  - Rundeck
+  - Automation
+  - DevOps
+  - Runbook
+  - IT Operations
+  - Job Scheduling
+  - Orchestration
+  created: '2026-05-02'
+  modified: '2026-05-06'
 binds:
-  - namespace: env
-    keys:
-      RUNDECK_API_TOKEN: RUNDECK_API_TOKEN
-      RUNDECK_BASE_URL: RUNDECK_BASE_URL
-
+- namespace: env
+  keys:
+    RUNDECK_API_TOKEN: RUNDECK_API_TOKEN
+    RUNDECK_BASE_URL: RUNDECK_BASE_URL
 capability:
   consumes:
-    - import: rundeck
-      location: ./shared/rundeck-api.yaml
-
+  - type: http
+    namespace: rundeck
+    baseUri: '{{env.RUNDECK_BASE_URL}}/api/58'
+    description: Rundeck REST API v58 for automation and runbook operations
+    authentication:
+      type: apikey
+      key: X-Rundeck-Auth-Token
+      value: '{{env.RUNDECK_API_TOKEN}}'
+      placement: header
+    resources:
+    - name: projects
+      path: /projects
+      description: Manage Rundeck projects
+      operations:
+      - name: list-projects
+        method: GET
+        description: List all accessible projects
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: array
+          value: $.
+      - name: create-project
+        method: POST
+        description: Create a new project
+        body:
+          type: json
+          data:
+            name: '{{tools.name}}'
+            description: '{{tools.description}}'
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: project
+      path: /project/{project}
+      description: Manage a specific project
+      operations:
+      - name: get-project
+        method: GET
+        description: Get project details
+        inputParameters:
+        - name: project
+          in: path
+          type: string
+          required: true
+          description: Project name
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: delete-project
+        method: DELETE
+        description: Delete a project
+        inputParameters:
+        - name: project
+          in: path
+          type: string
+          required: true
+          description: Project name
+    - name: project-jobs
+      path: /project/{project}/jobs
+      description: Manage jobs within a project
+      operations:
+      - name: list-jobs
+        method: GET
+        description: List all jobs in a project
+        inputParameters:
+        - name: project
+          in: path
+          type: string
+          required: true
+          description: Project name
+        - name: jobFilter
+          in: query
+          type: string
+          required: false
+          description: Filter by job name substring
+        - name: groupPath
+          in: query
+          type: string
+          required: false
+          description: Filter by job group path
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: array
+          value: $.
+    - name: job
+      path: /job/{id}
+      description: Manage a specific job by ID
+      operations:
+      - name: get-job
+        method: GET
+        description: Get job definition by ID
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+          description: Job UUID
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: delete-job
+        method: DELETE
+        description: Delete a job by ID
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+          description: Job UUID
+    - name: job-executions
+      path: /job/{id}/executions
+      description: Run jobs and retrieve execution history
+      operations:
+      - name: list-job-executions
+        method: GET
+        description: List executions for a job
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+          description: Job UUID
+        - name: status
+          in: query
+          type: string
+          required: false
+          description: 'Filter by status: running, succeeded, failed, aborted'
+        - name: max
+          in: query
+          type: integer
+          required: false
+          description: Maximum results to return
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: run-job
+        method: POST
+        description: Trigger a job execution
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+          description: Job UUID
+        body:
+          type: json
+          data:
+            argString: '{{tools.argString}}'
+            loglevel: '{{tools.loglevel}}'
+            filter: '{{tools.filter}}'
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: execution
+      path: /execution/{id}
+      description: Manage individual executions
+      operations:
+      - name: get-execution
+        method: GET
+        description: Get execution status by ID
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+          description: Execution ID
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: delete-execution
+        method: DELETE
+        description: Delete an execution record
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+          description: Execution ID
+    - name: execution-abort
+      path: /execution/{id}/abort
+      description: Abort running executions
+      operations:
+      - name: abort-execution
+        method: POST
+        description: Abort a running execution
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+          description: Execution ID
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: execution-output
+      path: /execution/{id}/output
+      description: Retrieve execution log output
+      operations:
+      - name: get-execution-output
+        method: GET
+        description: Get execution log output
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+          description: Execution ID
+        - name: lastlines
+          in: query
+          type: integer
+          required: false
+          description: Number of lines from end
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: project-nodes
+      path: /project/{project}/nodes
+      description: List and filter project nodes
+      operations:
+      - name: list-nodes
+        method: GET
+        description: List nodes in a project
+        inputParameters:
+        - name: project
+          in: path
+          type: string
+          required: true
+          description: Project name
+        - name: filter
+          in: query
+          type: string
+          required: false
+          description: Node filter expression
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: system-info
+      path: /system/info
+      description: System information
+      operations:
+      - name: get-system-info
+        method: GET
+        description: Get Rundeck server system information
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: system-executions-status
+      path: /system/executions/status
+      description: Execution mode management
+      operations:
+      - name: get-execution-mode
+        method: GET
+        description: Get current execution mode (active/passive)
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: tokens
+      path: /tokens
+      description: Manage API tokens
+      operations:
+      - name: list-tokens
+        method: GET
+        description: List API tokens
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: array
+          value: $.
+      - name: create-token
+        method: POST
+        description: Create a new API token
+        body:
+          type: json
+          data:
+            user: '{{tools.user}}'
+            roles: '{{tools.roles}}'
+            duration: '{{tools.duration}}'
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
   exposes:
-    - type: rest
-      port: 8080
-      namespace: runbook-automation-api
-      description: "Unified REST API for Rundeck runbook automation operations."
-      resources:
-        - path: /v1/projects
-          name: projects
-          description: "Project management"
-          operations:
-            - method: GET
-              name: list-projects
-              description: "List all Rundeck projects"
-              call: "rundeck.list-projects"
-              outputParameters:
-                - type: array
-                  mapping: "$."
-            - method: POST
-              name: create-project
-              description: "Create a new project"
-              call: "rundeck.create-project"
-              with:
-                name: "rest.name"
-                description: "rest.description"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-        - path: /v1/projects/{project}
-          name: project
-          description: "Individual project management"
-          operations:
-            - method: GET
-              name: get-project
-              description: "Get project details"
-              call: "rundeck.get-project"
-              with:
-                project: "rest.project"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-        - path: /v1/projects/{project}/jobs
-          name: jobs
-          description: "Job management within a project"
-          operations:
-            - method: GET
-              name: list-jobs
-              description: "List all jobs in a project"
-              call: "rundeck.list-jobs"
-              with:
-                project: "rest.project"
-                jobFilter: "rest.jobFilter"
-                groupPath: "rest.groupPath"
-              outputParameters:
-                - type: array
-                  mapping: "$."
-        - path: /v1/jobs/{id}
-          name: job
-          description: "Individual job management"
-          operations:
-            - method: GET
-              name: get-job
-              description: "Get job definition"
-              call: "rundeck.get-job"
-              with:
-                id: "rest.id"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-        - path: /v1/jobs/{id}/executions
-          name: job-executions
-          description: "Job execution control and history"
-          operations:
-            - method: GET
-              name: list-job-executions
-              description: "List execution history for a job"
-              call: "rundeck.list-job-executions"
-              with:
-                id: "rest.id"
-                status: "rest.status"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-            - method: POST
-              name: run-job
-              description: "Trigger a job execution"
-              call: "rundeck.run-job"
-              with:
-                id: "rest.id"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-        - path: /v1/executions/{id}
-          name: execution
-          description: "Execution status and management"
-          operations:
-            - method: GET
-              name: get-execution
-              description: "Get execution status and details"
-              call: "rundeck.get-execution"
-              with:
-                id: "rest.id"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-        - path: /v1/executions/{id}/abort
-          name: abort-execution
-          description: "Abort running executions"
-          operations:
-            - method: POST
-              name: abort-execution
-              description: "Abort a running execution"
-              call: "rundeck.abort-execution"
-              with:
-                id: "rest.id"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-        - path: /v1/executions/{id}/output
-          name: execution-output
-          description: "Execution log output"
-          operations:
-            - method: GET
-              name: get-execution-output
-              description: "Get execution log output"
-              call: "rundeck.get-execution-output"
-              with:
-                id: "rest.id"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-        - path: /v1/projects/{project}/nodes
-          name: nodes
-          description: "Node management per project"
-          operations:
-            - method: GET
-              name: list-nodes
-              description: "List project nodes"
-              call: "rundeck.list-nodes"
-              with:
-                project: "rest.project"
-                filter: "rest.filter"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-        - path: /v1/system/info
-          name: system-info
-          description: "System information"
-          operations:
-            - method: GET
-              name: get-system-info
-              description: "Get Rundeck server info"
-              call: "rundeck.get-system-info"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-        - path: /v1/system/executions/status
-          name: execution-mode
-          description: "Execution mode management"
-          operations:
-            - method: GET
-              name: get-execution-mode
-              description: "Get current execution mode"
-              call: "rundeck.get-execution-mode"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-        - path: /v1/tokens
-          name: tokens
-          description: "API token management"
-          operations:
-            - method: GET
-              name: list-tokens
-              description: "List API tokens"
-              call: "rundeck.list-tokens"
-              outputParameters:
-                - type: array
-                  mapping: "$."
-
-    - type: mcp
-      port: 9090
-      namespace: runbook-automation-mcp
-      transport: http
-      description: "MCP server for AI-assisted runbook automation and IT operations via Rundeck."
-      tools:
-        # Project Management
-        - name: list-projects
-          description: "List all Rundeck automation projects"
-          hints:
-            readOnly: true
-            openWorld: true
-          call: "rundeck.list-projects"
-          outputParameters:
-            - type: array
-              mapping: "$."
-
-        - name: get-project
-          description: "Get details for a specific Rundeck project"
-          hints:
-            readOnly: true
-            openWorld: true
-          call: "rundeck.get-project"
-          with:
-            project: "tools.project"
-          outputParameters:
-            - type: object
-              mapping: "$."
-
-        # Job Management
-        - name: list-jobs
-          description: "List automation jobs in a Rundeck project, optionally filtered by name or group"
-          hints:
-            readOnly: true
-            openWorld: true
-          call: "rundeck.list-jobs"
-          with:
-            project: "tools.project"
-            jobFilter: "tools.jobFilter"
-            groupPath: "tools.groupPath"
-          outputParameters:
-            - type: array
-              mapping: "$."
-
-        - name: get-job
-          description: "Get the definition and configuration of a specific Rundeck job"
-          hints:
-            readOnly: true
-            openWorld: true
-          call: "rundeck.get-job"
-          with:
-            id: "tools.id"
-          outputParameters:
-            - type: object
-              mapping: "$."
-
-        # Execution Control
-        - name: run-job
-          description: "Trigger a Rundeck job execution with optional arguments and node filter"
-          hints:
-            readOnly: false
-            openWorld: false
-          call: "rundeck.run-job"
-          with:
-            id: "tools.id"
-            argString: "tools.argString"
-            loglevel: "tools.loglevel"
-            filter: "tools.filter"
-          outputParameters:
-            - type: object
-              mapping: "$."
-
-        - name: get-execution
-          description: "Get the status and details of a Rundeck job execution - use to poll for completion"
-          hints:
-            readOnly: true
-            openWorld: true
-          call: "rundeck.get-execution"
-          with:
-            id: "tools.id"
-          outputParameters:
-            - type: object
-              mapping: "$."
-
-        - name: list-job-executions
-          description: "List execution history for a specific job with optional status filter"
-          hints:
-            readOnly: true
-            openWorld: true
-          call: "rundeck.list-job-executions"
-          with:
-            id: "tools.id"
-            status: "tools.status"
-            max: "tools.max"
-          outputParameters:
-            - type: object
-              mapping: "$."
-
-        - name: abort-execution
-          description: "Abort a running Rundeck execution"
-          hints:
-            readOnly: false
-            destructive: true
-            idempotent: true
-          call: "rundeck.abort-execution"
-          with:
-            id: "tools.id"
-          outputParameters:
-            - type: object
-              mapping: "$."
-
-        - name: get-execution-output
-          description: "Retrieve log output from a completed or running Rundeck execution"
-          hints:
-            readOnly: true
-            openWorld: true
-          call: "rundeck.get-execution-output"
-          with:
-            id: "tools.id"
-            lastlines: "tools.lastlines"
-          outputParameters:
-            - type: object
-              mapping: "$."
-
-        # Node Management
-        - name: list-nodes
-          description: "List nodes available in a Rundeck project with optional node filter"
-          hints:
-            readOnly: true
-            openWorld: true
-          call: "rundeck.list-nodes"
-          with:
-            project: "tools.project"
-            filter: "tools.filter"
-          outputParameters:
-            - type: object
-              mapping: "$."
-
-        # System Administration
-        - name: get-system-info
-          description: "Get Rundeck server system information including version and uptime"
-          hints:
-            readOnly: true
-            openWorld: false
-          call: "rundeck.get-system-info"
-          outputParameters:
-            - type: object
-              mapping: "$."
-
-        - name: get-execution-mode
-          description: "Check whether Rundeck is in active or passive execution mode"
-          hints:
-            readOnly: true
-            openWorld: false
-          call: "rundeck.get-execution-mode"
-          outputParameters:
-            - type: object
-              mapping: "$."
-
-        # Token Management
-        - name: list-tokens
-          description: "List API tokens for the current user or all users (admin)"
-          hints:
-            readOnly: true
-            openWorld: false
-          call: "rundeck.list-tokens"
-          outputParameters:
-            - type: array
-              mapping: "$."
+  - type: rest
+    port: 8080
+    namespace: runbook-automation-api
+    description: Unified REST API for Rundeck runbook automation operations.
+    resources:
+    - path: /v1/projects
+      name: projects
+      description: Project management
+      operations:
+      - method: GET
+        name: list-projects
+        description: List all Rundeck projects
+        call: rundeck.list-projects
+        outputParameters:
+        - type: array
+          mapping: $.
+      - method: POST
+        name: create-project
+        description: Create a new project
+        call: rundeck.create-project
+        with:
+          name: rest.name
+          description: rest.description
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/projects/{project}
+      name: project
+      description: Individual project management
+      operations:
+      - method: GET
+        name: get-project
+        description: Get project details
+        call: rundeck.get-project
+        with:
+          project: rest.project
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/projects/{project}/jobs
+      name: jobs
+      description: Job management within a project
+      operations:
+      - method: GET
+        name: list-jobs
+        description: List all jobs in a project
+        call: rundeck.list-jobs
+        with:
+          project: rest.project
+          jobFilter: rest.jobFilter
+          groupPath: rest.groupPath
+        outputParameters:
+        - type: array
+          mapping: $.
+    - path: /v1/jobs/{id}
+      name: job
+      description: Individual job management
+      operations:
+      - method: GET
+        name: get-job
+        description: Get job definition
+        call: rundeck.get-job
+        with:
+          id: rest.id
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/jobs/{id}/executions
+      name: job-executions
+      description: Job execution control and history
+      operations:
+      - method: GET
+        name: list-job-executions
+        description: List execution history for a job
+        call: rundeck.list-job-executions
+        with:
+          id: rest.id
+          status: rest.status
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: run-job
+        description: Trigger a job execution
+        call: rundeck.run-job
+        with:
+          id: rest.id
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/executions/{id}
+      name: execution
+      description: Execution status and management
+      operations:
+      - method: GET
+        name: get-execution
+        description: Get execution status and details
+        call: rundeck.get-execution
+        with:
+          id: rest.id
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/executions/{id}/abort
+      name: abort-execution
+      description: Abort running executions
+      operations:
+      - method: POST
+        name: abort-execution
+        description: Abort a running execution
+        call: rundeck.abort-execution
+        with:
+          id: rest.id
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/executions/{id}/output
+      name: execution-output
+      description: Execution log output
+      operations:
+      - method: GET
+        name: get-execution-output
+        description: Get execution log output
+        call: rundeck.get-execution-output
+        with:
+          id: rest.id
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/projects/{project}/nodes
+      name: nodes
+      description: Node management per project
+      operations:
+      - method: GET
+        name: list-nodes
+        description: List project nodes
+        call: rundeck.list-nodes
+        with:
+          project: rest.project
+          filter: rest.filter
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/system/info
+      name: system-info
+      description: System information
+      operations:
+      - method: GET
+        name: get-system-info
+        description: Get Rundeck server info
+        call: rundeck.get-system-info
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/system/executions/status
+      name: execution-mode
+      description: Execution mode management
+      operations:
+      - method: GET
+        name: get-execution-mode
+        description: Get current execution mode
+        call: rundeck.get-execution-mode
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/tokens
+      name: tokens
+      description: API token management
+      operations:
+      - method: GET
+        name: list-tokens
+        description: List API tokens
+        call: rundeck.list-tokens
+        outputParameters:
+        - type: array
+          mapping: $.
+  - type: mcp
+    port: 9090
+    namespace: runbook-automation-mcp
+    transport: http
+    description: MCP server for AI-assisted runbook automation and IT operations via Rundeck.
+    tools:
+    - name: list-projects
+      description: List all Rundeck automation projects
+      hints:
+        readOnly: true
+        openWorld: true
+      call: rundeck.list-projects
+      outputParameters:
+      - type: array
+        mapping: $.
+    - name: get-project
+      description: Get details for a specific Rundeck project
+      hints:
+        readOnly: true
+        openWorld: true
+      call: rundeck.get-project
+      with:
+        project: tools.project
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: list-jobs
+      description: List automation jobs in a Rundeck project, optionally filtered by name or group
+      hints:
+        readOnly: true
+        openWorld: true
+      call: rundeck.list-jobs
+      with:
+        project: tools.project
+        jobFilter: tools.jobFilter
+        groupPath: tools.groupPath
+      outputParameters:
+      - type: array
+        mapping: $.
+    - name: get-job
+      description: Get the definition and configuration of a specific Rundeck job
+      hints:
+        readOnly: true
+        openWorld: true
+      call: rundeck.get-job
+      with:
+        id: tools.id
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: run-job
+      description: Trigger a Rundeck job execution with optional arguments and node filter
+      hints:
+        readOnly: false
+        openWorld: false
+      call: rundeck.run-job
+      with:
+        id: tools.id
+        argString: tools.argString
+        loglevel: tools.loglevel
+        filter: tools.filter
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-execution
+      description: Get the status and details of a Rundeck job execution - use to poll for completion
+      hints:
+        readOnly: true
+        openWorld: true
+      call: rundeck.get-execution
+      with:
+        id: tools.id
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: list-job-executions
+      description: List execution history for a specific job with optional status filter
+      hints:
+        readOnly: true
+        openWorld: true
+      call: rundeck.list-job-executions
+      with:
+        id: tools.id
+        status: tools.status
+        max: tools.max
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: abort-execution
+      description: Abort a running Rundeck execution
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: rundeck.abort-execution
+      with:
+        id: tools.id
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-execution-output
+      description: Retrieve log output from a completed or running Rundeck execution
+      hints:
+        readOnly: true
+        openWorld: true
+      call: rundeck.get-execution-output
+      with:
+        id: tools.id
+        lastlines: tools.lastlines
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: list-nodes
+      description: List nodes available in a Rundeck project with optional node filter
+      hints:
+        readOnly: true
+        openWorld: true
+      call: rundeck.list-nodes
+      with:
+        project: tools.project
+        filter: tools.filter
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-system-info
+      description: Get Rundeck server system information including version and uptime
+      hints:
+        readOnly: true
+        openWorld: false
+      call: rundeck.get-system-info
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-execution-mode
+      description: Check whether Rundeck is in active or passive execution mode
+      hints:
+        readOnly: true
+        openWorld: false
+      call: rundeck.get-execution-mode
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: list-tokens
+      description: List API tokens for the current user or all users (admin)
+      hints:
+        readOnly: true
+        openWorld: false
+      call: rundeck.list-tokens
+      outputParameters:
+      - type: array
+        mapping: $.
