@@ -56,7 +56,7 @@ apis:
         url: https://docs.rundeck.com/docs/api/#authentication
       - type: Versioning
         url: https://docs.rundeck.com/docs/api/#api-versioning
-      - type: GitHub Repository
+      - type: GitHubRepository
         url: https://github.com/rundeck/rundeck-api-specs
       - type: Spectral Rules
         url: rules/rundeck-rules.yml
@@ -75,9 +75,9 @@ common:
     url: https://www.rundeck.com
   - type: Documentation
     url: https://docs.rundeck.com
-  - type: GitHub Organization
+  - type: GitHubOrganization
     url: https://github.com/rundeck
-  - type: GitHub Repository
+  - type: GitHubRepository
     url: https://github.com/rundeck/rundeck
   - type: Blog
     url: https://www.rundeck.com/blog
