@@ -71,6 +71,8 @@ apis:
       - type: NaftikoCapability
         url: capabilities/runbook-automation.yaml
 common:
+  - type: LinkedIn
+    url: https://www.linkedin.com/company/rundeck
   - type: Website
     url: https://www.rundeck.com
   - type: Documentation
