@@ -1,13 +1,12 @@
 aid: rundeck
 name: Rundeck
 description: >-
-  Rundeck is an open source runbook automation service with a web console, command line
-  tools, and a REST WebAPI. It enables IT teams to easily run automation tasks across a
-  set of nodes, providing self-service operations, job scheduling, and execution history.
-  Rundeck is developed by PagerDuty and supports enterprise runbook automation with role-based
-  access control, multi-tenant project management, and integrations with popular DevOps tools
-  including Jenkins, Ansible, Chef, and Puppet. The REST API is versioned and supports
-  authentication via API tokens, password-based session tokens, and JWT (commercial).
+  Rundeck is an open source runbook automation service with a web console, command line tools, and a REST WebAPI. It
+  enables IT teams to easily run automation tasks across a set of nodes, providing self-service operations, job
+  scheduling, and execution history. Rundeck is developed by PagerDuty and supports enterprise runbook automation with
+  role-based access control, multi-tenant project management, and integrations with popular DevOps tools including
+  Jenkins, Ansible, Chef, and Puppet. The REST API is versioned and supports authentication via API tokens,
+  password-based session tokens, and JWT (commercial).
 type: Index
 position: Consumer
 access: 3rd-Party
@@ -29,11 +28,10 @@ apis:
   - aid: rundeck:rundeck-api
     name: Rundeck API
     description: >-
-      The Rundeck REST API provides programmatic access to job execution, project management,
-      node management, execution history, user management, ACL policies, system administration,
-      cluster operations, and log storage. The current API version is 58, with a base URL of
-      $RUNDECK_SERVER_URL/api/58. Authentication is performed via X-Rundeck-Auth-Token header
-      or authtoken query parameter. The API returns JSON responses and supports webhook
+      The Rundeck REST API provides programmatic access to job execution, project management, node management, execution
+      history, user management, ACL policies, system administration, cluster operations, and log storage. The current
+      API version is 58, with a base URL of $RUNDECK_SERVER_URL/api/58. Authentication is performed via
+      X-Rundeck-Auth-Token header or authtoken query parameter. The API returns JSON responses and supports webhook
       integrations for event-driven automation workflows.
     humanURL: https://docs.rundeck.com/docs/api/
     baseURL: http://localhost:4440/api
@@ -68,8 +66,6 @@ apis:
         url: json-structure/rundeck-job-structure.json
       - type: JSONLD
         url: json-ld/rundeck-context.jsonld
-      - type: NaftikoCapability
-        url: capabilities/runbook-automation.yaml
 common:
   - type: LinkedIn
     url: https://www.linkedin.com/company/rundeck
