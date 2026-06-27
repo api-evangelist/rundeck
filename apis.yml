@@ -56,7 +56,7 @@ apis:
         url: https://docs.rundeck.com/docs/api/#api-versioning
       - type: GitHubRepository
         url: https://github.com/rundeck/rundeck-api-specs
-      - type: Spectral Rules
+      - type: SpectralRules
         url: rules/rundeck-rules.yml
       - type: Vocabulary
         url: vocabulary/rundeck-vocabulary.yml
