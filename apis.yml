@@ -67,6 +67,8 @@ apis:
       - type: JSONLD
         url: json-ld/rundeck-context.jsonld
 common:
+  - type: DomainSecurity
+    url: security/rundeck-domain-security.yml
   - type: LinkedIn
     url: https://www.linkedin.com/company/rundeck
   - type: Website
