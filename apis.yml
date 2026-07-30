@@ -8,6 +8,18 @@ description: >-
   Jenkins, Ansible, Chef, and Puppet. The REST API is versioned and supports authentication via API tokens,
   password-based session tokens, and JWT (commercial).
 type: Index
+accessModel:
+  pricing: freemium
+  onboarding: unknown
+  trial: false
+  try_now: false
+  public: false
+  label: Freemium
+  confidence: medium
+  source:
+  - plans
+  generated: '2026-07-22'
+  method: derived
 position: Consumer
 access: 3rd-Party
 image: https://www.rundeck.com/hubfs/Assets/Images/logos/rundeck-logo-black.png
