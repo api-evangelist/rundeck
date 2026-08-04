@@ -487,7 +487,7 @@ paths:
         - $ref: '#/components/parameters/ProjectName'
         - name: filter
           in: query
-          description: Node filter expression (e.g., "name: webserver")
+          description: "Node filter expression (e.g., \"name: webserver\")"
           schema:
             type: string
       responses:
