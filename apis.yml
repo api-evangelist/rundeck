@@ -37,47 +37,230 @@ created: '2024-01-01'
 modified: '2026-05-02'
 specificationVersion: '0.19'
 apis:
-  - aid: rundeck:rundeck-api
-    name: Rundeck API
-    description: >-
-      The Rundeck REST API provides programmatic access to job execution, project management, node management, execution
-      history, user management, ACL policies, system administration, cluster operations, and log storage. The current
-      API version is 58, with a base URL of $RUNDECK_SERVER_URL/api/58. Authentication is performed via
-      X-Rundeck-Auth-Token header or authtoken query parameter. The API returns JSON responses and supports webhook
-      integrations for event-driven automation workflows.
-    humanURL: https://docs.rundeck.com/docs/api/
-    baseURL: http://localhost:4440/api
-    tags:
-      - Automation
-      - DevOps
-      - Job Scheduling
-      - Orchestration
-      - Workflow
-      - Projects
-      - Executions
-      - Jobs
-      - Nodes
-    properties:
-      - type: Documentation
-        url: https://docs.rundeck.com/docs/api/
-      - type: OpenAPI
-        url: openapi/rundeck-openapi.yml
-      - type: Authentication
-        url: https://docs.rundeck.com/docs/api/#authentication
-      - type: Versioning
-        url: https://docs.rundeck.com/docs/api/#api-versioning
-      - type: GitHubRepository
-        url: https://github.com/rundeck/rundeck-api-specs
-      - type: SpectralRules
-        url: rules/rundeck-rules.yml
-      - type: Vocabulary
-        url: vocabulary/rundeck-vocabulary.yml
-      - type: JSONSchema
-        url: json-schema/rundeck-job-schema.json
-      - type: JSONStructure
-        url: json-structure/rundeck-job-structure.json
-      - type: JSONLD
-        url: json-ld/rundeck-context.jsonld
+- aid: rundeck:rundeck-acl-policies-api
+  name: Rundeck ACL Policies API
+  description: Manage Access Control List (ACL) policies for fine-grained permission control.
+  humanURL: https://docs.rundeck.com/docs/api/
+  baseURL: http://localhost:4440/api
+  tags:
+  - ACL Policies
+  properties:
+  - type: OpenAPI
+    url: openapi/rundeck-acl-policies-api-openapi.yml
+  - type: Documentation
+    url: https://docs.rundeck.com/docs/api/
+  - type: Authentication
+    url: https://docs.rundeck.com/docs/api/#authentication
+  - type: Versioning
+    url: https://docs.rundeck.com/docs/api/#api-versioning
+  - type: GitHubRepository
+    url: https://github.com/rundeck/rundeck-api-specs
+  - type: SpectralRules
+    url: rules/rundeck-rules.yml
+  - type: Vocabulary
+    url: vocabulary/rundeck-vocabulary.yml
+  - type: JSONSchema
+    url: json-schema/rundeck-job-schema.json
+  - type: JSONStructure
+    url: json-structure/rundeck-job-structure.json
+  - type: JSONLD
+    url: json-ld/rundeck-context.jsonld
+- aid: rundeck:rundeck-executions-api
+  name: Rundeck Executions API
+  description: Monitor running executions, retrieve execution history, and manage execution state.
+  humanURL: https://docs.rundeck.com/docs/api/
+  baseURL: http://localhost:4440/api
+  tags:
+  - Executions
+  properties:
+  - type: OpenAPI
+    url: openapi/rundeck-executions-api-openapi.yml
+  - type: Documentation
+    url: https://docs.rundeck.com/docs/api/
+  - type: Authentication
+    url: https://docs.rundeck.com/docs/api/#authentication
+  - type: Versioning
+    url: https://docs.rundeck.com/docs/api/#api-versioning
+  - type: GitHubRepository
+    url: https://github.com/rundeck/rundeck-api-specs
+  - type: SpectralRules
+    url: rules/rundeck-rules.yml
+  - type: Vocabulary
+    url: vocabulary/rundeck-vocabulary.yml
+  - type: JSONSchema
+    url: json-schema/rundeck-job-schema.json
+  - type: JSONStructure
+    url: json-structure/rundeck-job-structure.json
+  - type: JSONLD
+    url: json-ld/rundeck-context.jsonld
+- aid: rundeck:rundeck-jobs-api
+  name: Rundeck Jobs API
+  description: List, create, import, export, run, and delete automation jobs.
+  humanURL: https://docs.rundeck.com/docs/api/
+  baseURL: http://localhost:4440/api
+  tags:
+  - Jobs
+  properties:
+  - type: OpenAPI
+    url: openapi/rundeck-jobs-api-openapi.yml
+  - type: Documentation
+    url: https://docs.rundeck.com/docs/api/
+  - type: Authentication
+    url: https://docs.rundeck.com/docs/api/#authentication
+  - type: Versioning
+    url: https://docs.rundeck.com/docs/api/#api-versioning
+  - type: GitHubRepository
+    url: https://github.com/rundeck/rundeck-api-specs
+  - type: SpectralRules
+    url: rules/rundeck-rules.yml
+  - type: Vocabulary
+    url: vocabulary/rundeck-vocabulary.yml
+  - type: JSONSchema
+    url: json-schema/rundeck-job-schema.json
+  - type: JSONStructure
+    url: json-structure/rundeck-job-structure.json
+  - type: JSONLD
+    url: json-ld/rundeck-context.jsonld
+- aid: rundeck:rundeck-nodes-api
+  name: Rundeck Nodes API
+  description: Query and manage nodes (target machines) associated with Rundeck projects.
+  humanURL: https://docs.rundeck.com/docs/api/
+  baseURL: http://localhost:4440/api
+  tags:
+  - Nodes
+  properties:
+  - type: OpenAPI
+    url: openapi/rundeck-nodes-api-openapi.yml
+  - type: Documentation
+    url: https://docs.rundeck.com/docs/api/
+  - type: Authentication
+    url: https://docs.rundeck.com/docs/api/#authentication
+  - type: Versioning
+    url: https://docs.rundeck.com/docs/api/#api-versioning
+  - type: GitHubRepository
+    url: https://github.com/rundeck/rundeck-api-specs
+  - type: SpectralRules
+    url: rules/rundeck-rules.yml
+  - type: Vocabulary
+    url: vocabulary/rundeck-vocabulary.yml
+  - type: JSONSchema
+    url: json-schema/rundeck-job-schema.json
+  - type: JSONStructure
+    url: json-structure/rundeck-job-structure.json
+  - type: JSONLD
+    url: json-ld/rundeck-context.jsonld
+- aid: rundeck:rundeck-projects-api
+  name: Rundeck Projects API
+  description: Create and manage Rundeck projects which organize jobs and node configurations.
+  humanURL: https://docs.rundeck.com/docs/api/
+  baseURL: http://localhost:4440/api
+  tags:
+  - Projects
+  properties:
+  - type: OpenAPI
+    url: openapi/rundeck-projects-api-openapi.yml
+  - type: Documentation
+    url: https://docs.rundeck.com/docs/api/
+  - type: Authentication
+    url: https://docs.rundeck.com/docs/api/#authentication
+  - type: Versioning
+    url: https://docs.rundeck.com/docs/api/#api-versioning
+  - type: GitHubRepository
+    url: https://github.com/rundeck/rundeck-api-specs
+  - type: SpectralRules
+    url: rules/rundeck-rules.yml
+  - type: Vocabulary
+    url: vocabulary/rundeck-vocabulary.yml
+  - type: JSONSchema
+    url: json-schema/rundeck-job-schema.json
+  - type: JSONStructure
+    url: json-structure/rundeck-job-structure.json
+  - type: JSONLD
+    url: json-ld/rundeck-context.jsonld
+- aid: rundeck:rundeck-system-api
+  name: Rundeck System API
+  description: Access system information, health checks, execution modes, metrics, and configuration.
+  humanURL: https://docs.rundeck.com/docs/api/
+  baseURL: http://localhost:4440/api
+  tags:
+  - System
+  properties:
+  - type: OpenAPI
+    url: openapi/rundeck-system-api-openapi.yml
+  - type: Documentation
+    url: https://docs.rundeck.com/docs/api/
+  - type: Authentication
+    url: https://docs.rundeck.com/docs/api/#authentication
+  - type: Versioning
+    url: https://docs.rundeck.com/docs/api/#api-versioning
+  - type: GitHubRepository
+    url: https://github.com/rundeck/rundeck-api-specs
+  - type: SpectralRules
+    url: rules/rundeck-rules.yml
+  - type: Vocabulary
+    url: vocabulary/rundeck-vocabulary.yml
+  - type: JSONSchema
+    url: json-schema/rundeck-job-schema.json
+  - type: JSONStructure
+    url: json-structure/rundeck-job-structure.json
+  - type: JSONLD
+    url: json-ld/rundeck-context.jsonld
+- aid: rundeck:rundeck-tokens-api
+  name: Rundeck Tokens API
+  description: Create, list, and delete API authentication tokens.
+  humanURL: https://docs.rundeck.com/docs/api/
+  baseURL: http://localhost:4440/api
+  tags:
+  - Tokens
+  properties:
+  - type: OpenAPI
+    url: openapi/rundeck-tokens-api-openapi.yml
+  - type: Documentation
+    url: https://docs.rundeck.com/docs/api/
+  - type: Authentication
+    url: https://docs.rundeck.com/docs/api/#authentication
+  - type: Versioning
+    url: https://docs.rundeck.com/docs/api/#api-versioning
+  - type: GitHubRepository
+    url: https://github.com/rundeck/rundeck-api-specs
+  - type: SpectralRules
+    url: rules/rundeck-rules.yml
+  - type: Vocabulary
+    url: vocabulary/rundeck-vocabulary.yml
+  - type: JSONSchema
+    url: json-schema/rundeck-job-schema.json
+  - type: JSONStructure
+    url: json-structure/rundeck-job-structure.json
+  - type: JSONLD
+    url: json-ld/rundeck-context.jsonld
+- aid: rundeck:rundeck-users-api
+  name: Rundeck Users API
+  description: Manage user profiles, roles, and API token generation.
+  humanURL: https://docs.rundeck.com/docs/api/
+  baseURL: http://localhost:4440/api
+  tags:
+  - Users
+  properties:
+  - type: OpenAPI
+    url: openapi/rundeck-users-api-openapi.yml
+  - type: Documentation
+    url: https://docs.rundeck.com/docs/api/
+  - type: Authentication
+    url: https://docs.rundeck.com/docs/api/#authentication
+  - type: Versioning
+    url: https://docs.rundeck.com/docs/api/#api-versioning
+  - type: GitHubRepository
+    url: https://github.com/rundeck/rundeck-api-specs
+  - type: SpectralRules
+    url: rules/rundeck-rules.yml
+  - type: Vocabulary
+    url: vocabulary/rundeck-vocabulary.yml
+  - type: JSONSchema
+    url: json-schema/rundeck-job-schema.json
+  - type: JSONStructure
+    url: json-structure/rundeck-job-structure.json
+  - type: JSONLD
+    url: json-ld/rundeck-context.jsonld
 common:
   - type: DomainSecurity
     url: security/rundeck-domain-security.yml
