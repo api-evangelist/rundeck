@@ -1,0 +1,2034 @@
+{
+  "item": [
+    {
+      "id": "e50c5016-f132-43da-9aea-5465d11cc5c1",
+      "name": "Executions",
+      "description": {
+        "content": "Monitor running executions, retrieve execution history, and manage execution state.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "ef6e4b53-2c1d-4a2b-ac1d-470ba50ec021",
+          "name": "Run an Ad Hoc Command",
+          "request": {
+            "name": "Run an Ad Hoc Command",
+            "description": {
+              "content": "Runs an ad hoc command on nodes in the specified project without requiring a pre-defined job.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "project",
+                ":project",
+                "run",
+                "command"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "project",
+                  "description": "(Required) The name of the Rundeck project"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"exec\": \"<string>\",\n  \"filter\": \"<string>\",\n  \"loglevel\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "4107bed9-069a-4aef-a7c6-acee1d23febd",
+              "name": "Command execution started",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "project",
+                    ":project",
+                    "run",
+                    "command"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "project",
+                      "description": "(Required) The name of the Rundeck project"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Rundeck-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"exec\": \"<string>\",\n  \"filter\": \"<string>\",\n  \"loglevel\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": 5521,\n  \"permalink\": \"https://ydxcHYtFhEhxy.gbLQSkD-pnH.1kuop.E2V1UhtOZXbzeHrDsrHMTy+Id\",\n  \"href\": \"http://ToFsvDzwF.czeghT1Drnv34rRaIAhSACTNHIRx2vetWXLHq+jx\",\n  \"status\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bca5c47a-1182-474f-aba1-27a7b4652104",
+              "name": "Unauthorized - invalid or missing API token",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "project",
+                    ":project",
+                    "run",
+                    "command"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "project",
+                      "description": "(Required) The name of the Rundeck project"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Rundeck-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"exec\": \"<string>\",\n  \"filter\": \"<string>\",\n  \"loglevel\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": true,\n  \"errorCode\": \"string\",\n  \"message\": \"string\",\n  \"apiversion\": 76\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4a0ec9dc-16d2-449b-8bac-b40e4896e629",
+              "name": "Resource not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "project",
+                    ":project",
+                    "run",
+                    "command"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "project",
+                      "description": "(Required) The name of the Rundeck project"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Rundeck-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"exec\": \"<string>\",\n  \"filter\": \"<string>\",\n  \"loglevel\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": true,\n  \"errorCode\": \"string\",\n  \"message\": \"string\",\n  \"apiversion\": 76\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "9fc517bb-0963-455d-8a4f-7fe27335777e",
+          "name": "List Job Executions",
+          "request": {
+            "name": "List Job Executions",
+            "description": {
+              "content": "Returns a list of executions for a specific job, with optional filtering by status.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "job",
+                ":id",
+                "executions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "status",
+                  "value": "<string>",
+                  "description": "Filter executions by status"
+                },
+                {
+                  "disabled": false,
+                  "key": "max",
+                  "value": "20",
+                  "description": "Maximum number of results to return"
+                },
+                {
+                  "disabled": false,
+                  "key": "offset",
+                  "value": "0",
+                  "description": "Offset for pagination"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) The unique ID of the job"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "8ac604b6-edf6-4055-92ea-2ab24caf5a50",
+              "name": "List of executions",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "job",
+                    ":id",
+                    "executions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "max",
+                      "value": "20"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "0"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The unique ID of the job"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Rundeck-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"paging\": {\n    \"count\": 9052,\n    \"total\": 5489,\n    \"offset\": 6214,\n    \"max\": 8206\n  },\n  \"executions\": [\n    {\n      \"id\": 792,\n      \"href\": \"https://VGiVxVKcUH.fyuCc2p4Qsez26m+r\",\n      \"permalink\": \"https://xtFvaauBldaPoh.mqdbxGgiToXZDHJoTIRUvFssNABSH-DDkRXV6-sZ8fpqTMSEugcMnz\",\n      \"status\": \"succeeded\",\n      \"project\": \"string\",\n      \"user\": \"string\",\n      \"dateStarted\": {\n        \"unixtime\": 273,\n        \"date\": \"1985-08-05T23:22:28.758Z\"\n      },\n      \"dateEnded\": {\n        \"unixtime\": 9243,\n        \"date\": \"1976-03-29T16:36:28.224Z\"\n      },\n      \"job\": {\n        \"id\": \"string\",\n        \"name\": \"string\",\n        \"group\": \"string\",\n        \"project\": \"string\",\n        \"href\": \"http://OXVKOLTbT.czdUBWBSaz\",\n        \"permalink\": \"https://KhSlcTFFbOjxJbfxyRqLiWQC.xvT6afG8poPbUoxFkr+26r3otap7wVYjTBv74B05GpRMRQWzJwQ2b\"\n      },\n      \"description\": \"string\",\n      \"argstring\": \"string\",\n      \"serverUUID\": \"string\"\n    },\n    {\n      \"id\": 786,\n      \"href\": \"https://gpVwCfSXvRcnG.nzrrqv71JMffenRrWnjei3UNjUgI75Qe0MM4Zj8w-DU3iqA\",\n      \"permalink\": \"https://ZyLZrDHkLyLNRe.pxzxTYMdxsrYTM-lfToXsbJ73cNTZzSCkymv,xJqqZivjkWa8o03znevb3-2lSVimyMSK1\",\n      \"status\": \"failed-with-retry\",\n      \"project\": \"string\",\n      \"user\": \"string\",\n      \"dateStarted\": {\n        \"unixtime\": 2938,\n        \"date\": \"1994-09-24T18:26:20.601Z\"\n      },\n      \"dateEnded\": {\n        \"unixtime\": 4607,\n        \"date\": \"1996-12-08T19:20:45.289Z\"\n      },\n      \"job\": {\n        \"id\": \"string\",\n        \"name\": \"string\",\n        \"group\": \"string\",\n        \"project\": \"string\",\n        \"href\": \"http://Imzq.awgV.9,Pn7dSHirZQOYhaDi9XKm+AwVBnRilV79nJzrVf\",\n        \"permalink\": \"https://xnfjecvK.jiLI,bN+nDuECf\"\n      },\n      \"description\": \"string\",\n      \"argstring\": \"string\",\n      \"serverUUID\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "235e7d13-e87b-4a4a-8ed3-685a63a0d7eb",
+              "name": "Unauthorized - invalid or missing API token",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "job",
+                    ":id",
+                    "executions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "max",
+                      "value": "20"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "0"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The unique ID of the job"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Rundeck-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": true,\n  \"errorCode\": \"string\",\n  \"message\": \"string\",\n  \"apiversion\": 76\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "08b22a31-23a0-46d0-830a-2347665fe3ff",
+              "name": "Resource not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "job",
+                    ":id",
+                    "executions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "max",
+                      "value": "20"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "0"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The unique ID of the job"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Rundeck-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": true,\n  \"errorCode\": \"string\",\n  \"message\": \"string\",\n  \"apiversion\": 76\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "5b3bbe6d-d06b-4bd7-8ac9-402ca312cfd0",
+          "name": "Run a Job",
+          "request": {
+            "name": "Run a Job",
+            "description": {
+              "content": "Triggers a new execution of the specified job with optional arguments, node filter, and execution options.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "job",
+                ":id",
+                "executions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) The unique ID of the job"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"argString\": \"<string>\",\n  \"loglevel\": \"<string>\",\n  \"asUser\": \"<string>\",\n  \"filter\": \"<string>\",\n  \"runAtTime\": \"<dateTime>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "b0b11e77-d43f-4129-a5b4-ec24499dce9e",
+              "name": "Job execution started",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "job",
+                    ":id",
+                    "executions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The unique ID of the job"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Rundeck-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"argString\": \"<string>\",\n  \"loglevel\": \"<string>\",\n  \"asUser\": \"<string>\",\n  \"filter\": \"<string>\",\n  \"runAtTime\": \"<dateTime>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": 1965,\n  \"href\": \"http://yRtPTxHJFqWiOExshxQhnpW.pbjoqRSiBgdULEPH,.Z6t4by2IxlMuemq-PzumA9fQgRfVJp8dpMq0mtkcaalrBw.UPHjo\",\n  \"permalink\": \"http://FkUlYTFHcGLXXKeiiZBHvNcAcxEaToGq.yevcyLeEwBfcu\",\n  \"status\": \"failed-with-retry\",\n  \"project\": \"string\",\n  \"user\": \"string\",\n  \"dateStarted\": {\n    \"unixtime\": 6339,\n    \"date\": \"1957-05-19T21:45:52.547Z\"\n  },\n  \"dateEnded\": {\n    \"unixtime\": 3039,\n    \"date\": \"1950-02-04T17:43:36.334Z\"\n  },\n  \"job\": {\n    \"id\": \"string\",\n    \"name\": \"string\",\n    \"group\": \"string\",\n    \"project\": \"string\",\n    \"href\": \"http://FiKcNamERrNjhnwjmQZYh.omnqsCeGcTB.LmJ-,b4QZnz2ONH9vRFaArrQwuG.Sbk0+VRvzro\",\n    \"permalink\": \"https://jNirhwAYFp.swiFcv4NlnONduyZRzuD\"\n  },\n  \"description\": \"string\",\n  \"argstring\": \"string\",\n  \"serverUUID\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "61c1706d-50f4-4839-8d83-50f7d3755e03",
+              "name": "Bad request - invalid parameters",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "job",
+                    ":id",
+                    "executions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The unique ID of the job"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Rundeck-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"argString\": \"<string>\",\n  \"loglevel\": \"<string>\",\n  \"asUser\": \"<string>\",\n  \"filter\": \"<string>\",\n  \"runAtTime\": \"<dateTime>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": true,\n  \"errorCode\": \"string\",\n  \"message\": \"string\",\n  \"apiversion\": 76\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3ea204f3-2f75-4173-a933-2d146f8bfbb7",
+              "name": "Unauthorized - invalid or missing API token",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "job",
+                    ":id",
+                    "executions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The unique ID of the job"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Rundeck-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"argString\": \"<string>\",\n  \"loglevel\": \"<string>\",\n  \"asUser\": \"<string>\",\n  \"filter\": \"<string>\",\n  \"runAtTime\": \"<dateTime>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": true,\n  \"errorCode\": \"string\",\n  \"message\": \"string\",\n  \"apiversion\": 76\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5d818b38-9869-496f-b4b1-0049d3f318b4",
+              "name": "Resource not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "job",
+                    ":id",
+                    "executions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The unique ID of the job"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Rundeck-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"argString\": \"<string>\",\n  \"loglevel\": \"<string>\",\n  \"asUser\": \"<string>\",\n  \"filter\": \"<string>\",\n  \"runAtTime\": \"<dateTime>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": true,\n  \"errorCode\": \"string\",\n  \"message\": \"string\",\n  \"apiversion\": 76\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "49cb0ec1-242c-4ca1-b208-0a98c994fbeb",
+          "name": "Get Execution Status",
+          "request": {
+            "name": "Get Execution Status",
+            "description": {
+              "content": "Returns the current status and details of an execution by its unique ID. Use this to poll for completion of asynchronously started jobs.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "execution",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) The unique ID of the execution"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "2902520d-6cfb-4265-9503-aa991fbf55ec",
+              "name": "Execution status and details",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "execution",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The unique ID of the execution"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Rundeck-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": 1965,\n  \"href\": \"http://yRtPTxHJFqWiOExshxQhnpW.pbjoqRSiBgdULEPH,.Z6t4by2IxlMuemq-PzumA9fQgRfVJp8dpMq0mtkcaalrBw.UPHjo\",\n  \"permalink\": \"http://FkUlYTFHcGLXXKeiiZBHvNcAcxEaToGq.yevcyLeEwBfcu\",\n  \"status\": \"failed-with-retry\",\n  \"project\": \"string\",\n  \"user\": \"string\",\n  \"dateStarted\": {\n    \"unixtime\": 6339,\n    \"date\": \"1957-05-19T21:45:52.547Z\"\n  },\n  \"dateEnded\": {\n    \"unixtime\": 3039,\n    \"date\": \"1950-02-04T17:43:36.334Z\"\n  },\n  \"job\": {\n    \"id\": \"string\",\n    \"name\": \"string\",\n    \"group\": \"string\",\n    \"project\": \"string\",\n    \"href\": \"http://FiKcNamERrNjhnwjmQZYh.omnqsCeGcTB.LmJ-,b4QZnz2ONH9vRFaArrQwuG.Sbk0+VRvzro\",\n    \"permalink\": \"https://jNirhwAYFp.swiFcv4NlnONduyZRzuD\"\n  },\n  \"description\": \"string\",\n  \"argstring\": \"string\",\n  \"serverUUID\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "78b87f0b-bf40-4ff4-909e-85f2cd270618",
+              "name": "Unauthorized - invalid or missing API token",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "execution",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The unique ID of the execution"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Rundeck-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": true,\n  \"errorCode\": \"string\",\n  \"message\": \"string\",\n  \"apiversion\": 76\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b028b70f-f562-46bb-8fb2-7127aca8a988",
+              "name": "Resource not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "execution",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The unique ID of the execution"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Rundeck-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": true,\n  \"errorCode\": \"string\",\n  \"message\": \"string\",\n  \"apiversion\": 76\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "22a75c09-dfc5-48e3-a329-c3f042a30de4",
+          "name": "Delete an Execution",
+          "request": {
+            "name": "Delete an Execution",
+            "description": {
+              "content": "Deletes an execution record by its unique ID.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "execution",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) The unique ID of the execution"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "f337a02c-8398-4f19-a7b6-2030b11c6fde",
+              "name": "Execution deleted",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "execution",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The unique ID of the execution"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Rundeck-Auth-Token",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "733fcffe-d0e2-4bc7-8988-e94510731c4e",
+              "name": "Unauthorized - invalid or missing API token",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "execution",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The unique ID of the execution"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Rundeck-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": true,\n  \"errorCode\": \"string\",\n  \"message\": \"string\",\n  \"apiversion\": 76\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6240fc09-dcba-4faf-af81-91eb7a79275c",
+              "name": "Forbidden - execution is currently running",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "execution",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The unique ID of the execution"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Rundeck-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": true,\n  \"errorCode\": \"string\",\n  \"message\": \"string\",\n  \"apiversion\": 76\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "365f60fb-3192-49f6-80ad-2d6c88e24f82",
+              "name": "Resource not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "execution",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The unique ID of the execution"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Rundeck-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": true,\n  \"errorCode\": \"string\",\n  \"message\": \"string\",\n  \"apiversion\": 76\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d839e615-c10d-47e1-bff7-173230aa725d",
+          "name": "Abort an Execution",
+          "request": {
+            "name": "Abort an Execution",
+            "description": {
+              "content": "Aborts a currently running execution. The execution will transition to aborted status.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "execution",
+                ":id",
+                "abort"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) The unique ID of the execution"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "d64ef167-4392-4195-a1fe-5d95f2c76641",
+              "name": "Abort request submitted",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "execution",
+                    ":id",
+                    "abort"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The unique ID of the execution"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Rundeck-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"abort\": {\n    \"status\": \"failed\",\n    \"reason\": \"string\"\n  },\n  \"execution\": {\n    \"id\": 5152,\n    \"permalink\": \"http://uDgOnTdV.ouhrzBa+BJ3dBs5geJ7jJiLGdM1FNo\",\n    \"href\": \"https://KkbojLucVdvguYImUIG.kznoQ15u2-lHigMj1tgmnHY9LyiPAu7rxpBWbkVVvj2Oboci7,Jfj5V40RssMxLeo7\",\n    \"status\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bcb7db13-5608-4d18-a444-dd34a3736c26",
+              "name": "Unauthorized - invalid or missing API token",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "execution",
+                    ":id",
+                    "abort"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The unique ID of the execution"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Rundeck-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": true,\n  \"errorCode\": \"string\",\n  \"message\": \"string\",\n  \"apiversion\": 76\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "acb490b7-a6b0-4cf4-b613-ac5716cf3551",
+              "name": "Resource not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "execution",
+                    ":id",
+                    "abort"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The unique ID of the execution"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Rundeck-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": true,\n  \"errorCode\": \"string\",\n  \"message\": \"string\",\n  \"apiversion\": 76\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "f9bd6b3a-8097-4edc-b565-59387a77fdb1",
+          "name": "Get Execution Output Log",
+          "request": {
+            "name": "Get Execution Output Log",
+            "description": {
+              "content": "Returns the log output for an execution in real-time or after completion. Supports streaming via offset parameter for tailing live executions.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "execution",
+                ":id",
+                "output"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "offset",
+                  "value": "0",
+                  "description": "Byte offset to read from"
+                },
+                {
+                  "disabled": false,
+                  "key": "lastlines",
+                  "value": "<integer>",
+                  "description": "Number of lines from end of log"
+                },
+                {
+                  "disabled": false,
+                  "key": "format",
+                  "value": "<string>",
+                  "description": "Output format"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) The unique ID of the execution"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "7461e3cf-2c99-42cd-9414-57c86afd46f4",
+              "name": "Execution log output",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "execution",
+                    ":id",
+                    "output"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "offset",
+                      "value": "0"
+                    },
+                    {
+                      "key": "lastlines",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "format",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The unique ID of the execution"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Rundeck-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\",\n  \"offset\": \"string\",\n  \"completed\": false,\n  \"execCompleted\": false,\n  \"hasFailedNodes\": true,\n  \"execState\": \"string\",\n  \"lastModified\": \"string\",\n  \"execDuration\": 8008,\n  \"entries\": [\n    {\n      \"time\": \"string\",\n      \"level\": \"string\",\n      \"log\": \"string\",\n      \"user\": \"string\",\n      \"node\": \"string\"\n    },\n    {\n      \"time\": \"string\",\n      \"level\": \"string\",\n      \"log\": \"string\",\n      \"user\": \"string\",\n      \"node\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ea62f8d8-f3c5-4000-95e3-f053445271d6",
+              "name": "Unauthorized - invalid or missing API token",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "execution",
+                    ":id",
+                    "output"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "offset",
+                      "value": "0"
+                    },
+                    {
+                      "key": "lastlines",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "format",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The unique ID of the execution"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Rundeck-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": true,\n  \"errorCode\": \"string\",\n  \"message\": \"string\",\n  \"apiversion\": 76\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0d4898db-2d74-4147-b9e2-fa0420485d26",
+              "name": "Resource not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "execution",
+                    ":id",
+                    "output"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "offset",
+                      "value": "0"
+                    },
+                    {
+                      "key": "lastlines",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "format",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The unique ID of the execution"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Rundeck-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": true,\n  \"errorCode\": \"string\",\n  \"message\": \"string\",\n  \"apiversion\": 76\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "811542b3-9557-4fde-af25-e5b9dae27a0a",
+          "name": "List Project Executions",
+          "request": {
+            "name": "List Project Executions",
+            "description": {
+              "content": "Returns executions across all jobs in a project with optional filtering.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "project",
+                ":project",
+                "executions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "status",
+                  "value": "<string>",
+                  "description": "Filter by execution status"
+                },
+                {
+                  "disabled": false,
+                  "key": "max",
+                  "value": "20",
+                  "description": "Maximum results per page"
+                },
+                {
+                  "disabled": false,
+                  "key": "offset",
+                  "value": "0",
+                  "description": "Pagination offset"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "project",
+                  "description": "(Required) The name of the Rundeck project"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "f2e02510-955d-4c28-a833-f74e2e356f8e",
+              "name": "List of executions",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "project",
+                    ":project",
+                    "executions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "max",
+                      "value": "20"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "0"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "project",
+                      "description": "(Required) The name of the Rundeck project"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Rundeck-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"paging\": {\n    \"count\": 9795,\n    \"total\": 6393,\n    \"offset\": 342,\n    \"max\": 280\n  },\n  \"executions\": [\n    {\n      \"id\": 9640,\n      \"href\": \"https://ezyjwbNbNLoCiKJeBYWLDdfWQlEr.oejHFOH9tTvEjv5mneviW+Yse+0kGiAXTH399Kl\",\n      \"permalink\": \"http://RRgLnBY.rvgym.w0msVWGGJWCcJ8fXxg,-ntB-glRZX7Qjcg3E5CLEWFpMo8,ML4GfcaRrR\",\n      \"status\": \"aborted\",\n      \"project\": \"string\",\n      \"user\": \"string\",\n      \"dateStarted\": {\n        \"unixtime\": 8307,\n        \"date\": \"1998-10-27T13:12:06.190Z\"\n      },\n      \"dateEnded\": {\n        \"unixtime\": 6077,\n        \"date\": \"1963-12-02T15:31:52.365Z\"\n      },\n      \"job\": {\n        \"id\": \"string\",\n        \"name\": \"string\",\n        \"group\": \"string\",\n        \"project\": \"string\",\n        \"href\": \"https://PRaNVYoGNjbAcIuQuVsllqOyb.asu89myI8sMKbSzQ2mLhz7nDrOcZm8qYoJE9A1zzn-KivPfbgDt3.5gj2O4g93+\",\n        \"permalink\": \"http://mJrJscsheBlEQtU.dhoimQBYHhhRhUTOE5aYdYdaHY-1pFPHI5XdoGl3bKgprEGn8YXSUtadGjn4N1vX3xwgH62Qz7m\"\n      },\n      \"description\": \"string\",\n      \"argstring\": \"string\",\n      \"serverUUID\": \"string\"\n    },\n    {\n      \"id\": 1307,\n      \"href\": \"https://JlMdbkGKqUpzMh.dlM.,Vhx7OePkHXUFZTRjxNe02ppg.IH6zYIwqLSWEFIBmvbi-OtVCxWnixojfB\",\n      \"permalink\": \"http://hAO.xbZU4D9Pk4OLa,uX6\",\n      \"status\": \"failed-with-retry\",\n      \"project\": \"string\",\n      \"user\": \"string\",\n      \"dateStarted\": {\n        \"unixtime\": 8489,\n        \"date\": \"1955-08-13T13:15:18.859Z\"\n      },\n      \"dateEnded\": {\n        \"unixtime\": 7166,\n        \"date\": \"1949-08-07T13:18:11.884Z\"\n      },\n      \"job\": {\n        \"id\": \"string\",\n        \"name\": \"string\",\n        \"group\": \"string\",\n        \"project\": \"string\",\n        \"href\": \"http://HswoKHssZazLjLXK.ivfoNQjtHPkAgq8+hay3x7kM+qfylWjiEATRL\",\n        \"permalink\": \"https://jjrIRodYMFfcxpkdz.nijWpY0XRYMHCwVasUj3iuwtIwfF6aYhXQcTIioe+UjChBsnK6dOVXT\"\n      },\n      \"description\": \"string\",\n      \"argstring\": \"string\",\n      \"serverUUID\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e11c66d7-7124-4aee-8e59-994e2bd68e76",
+              "name": "Unauthorized - invalid or missing API token",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "project",
+                    ":project",
+                    "executions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "max",
+                      "value": "20"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "0"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "project",
+                      "description": "(Required) The name of the Rundeck project"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Rundeck-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": true,\n  \"errorCode\": \"string\",\n  \"message\": \"string\",\n  \"apiversion\": 76\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2ea24567-c119-4e27-8551-7fa56d47f755",
+              "name": "Resource not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "project",
+                    ":project",
+                    "executions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "max",
+                      "value": "20"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "0"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "project",
+                      "description": "(Required) The name of the Rundeck project"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Rundeck-Auth-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": true,\n  \"errorCode\": \"string\",\n  \"message\": \"string\",\n  \"apiversion\": 76\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "http://localhost:4440/api/58",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "X-Rundeck-Auth-Token"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "f6db5f0a-989a-4b76-b9ee-a1bd345503db",
+    "name": "Rundeck Executions API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Rundeck REST API provides programmatic access to all Rundeck functionality including job management, execution control, project administration, node management, user management, ACL policies, system administration, and cluster operations. The current API version is 58. Rundeck is an open source runbook automation service developed by PagerDuty that enables IT teams to run automation tasks across nodes, manage self-service operations, and maintain execution history.\n\nContact Support:\n Name: Rundeck Support\n Email: support@rundeck.com",
+      "type": "text/plain"
+    }
+  }
+}

@@ -1,0 +1,147 @@
+openapi: 3.2.0
+info:
+  title: Rundeck Users API
+  description: The Rundeck REST API provides programmatic access to all Rundeck functionality including job management, execution control, project administration, node management, user management, ACL policies, system administration, and cluster operations. The current API version is 58. Rundeck is an open source runbook automation service developed by PagerDuty that enables IT teams to run automation tasks across nodes, manage self-service operations, and maintain execution history.
+  version: '58'
+  contact:
+    name: Rundeck Support
+    url: https://www.rundeck.com/support
+    email: support@rundeck.com
+  termsOfService: https://www.rundeck.com/terms-of-service
+  license:
+    name: Apache 2.0
+    url: https://github.com/rundeck/rundeck/blob/main/LICENSE
+servers:
+- url: http://localhost:4440/api/58
+  description: Local Rundeck Instance (Version 58)
+- url: https://your-rundeck-server.example.com/api/58
+  description: Production Rundeck Instance
+security:
+- tokenAuth: []
+tags:
+- name: Users
+  description: Manage user profiles, roles, and API token generation.
+paths:
+  /user/list:
+    get:
+      operationId: listUsers
+      summary: List Users
+      description: Returns a list of all Rundeck users (admin only).
+      tags:
+      - Users
+      responses:
+        '200':
+          description: List of users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /user/info:
+    get:
+      operationId: getCurrentUserInfo
+      summary: Get Current User Info
+      description: Returns profile information for the currently authenticated user.
+      tags:
+      - Users
+      responses:
+        '200':
+          description: Current user profile
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      operationId: updateCurrentUserInfo
+      summary: Update Current User Info
+      description: Updates profile information for the currently authenticated user.
+      tags:
+      - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserUpdateRequest'
+      responses:
+        '200':
+          description: Updated user profile
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        login:
+          type: string
+          description: Username
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+          format: email
+        created:
+          type: string
+          format: date-time
+        updated:
+          type: string
+          format: date-time
+        lastJob:
+          type: string
+          format: date-time
+        tokens:
+          type: integer
+          description: Number of API tokens for this user
+    UserUpdateRequest:
+      type: object
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+          format: email
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: boolean
+          description: Always true for error responses
+        errorCode:
+          type: string
+          description: Machine-readable error code
+        message:
+          type: string
+          description: Human-readable error message
+        apiversion:
+          type: integer
+          description: API version that produced this response
+  responses:
+    Unauthorized:
+      description: Unauthorized - invalid or missing API token
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+  securitySchemes:
+    tokenAuth:
+      type: apiKey
+      in: header
+      name: X-Rundeck-Auth-Token
+      description: API token for authentication. Obtain tokens from the Rundeck web interface under User Profile > User API Tokens or via the /api/V/tokens endpoint.
+externalDocs:
+  description: Rundeck API Documentation
+  url: https://docs.rundeck.com/docs/api/

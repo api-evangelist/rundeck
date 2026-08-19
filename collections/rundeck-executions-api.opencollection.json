@@ -1,0 +1,240 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Rundeck Executions API",
+    "version": "58"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-Rundeck-Auth-Token",
+      "value": "{{X-Rundeck-Auth-Token}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Executions",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Run an Ad Hoc Command",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "http://localhost:4440/api/58/project/:project/run/command",
+            "params": [
+              {
+                "name": "project",
+                "value": "",
+                "type": "path",
+                "description": "The name of the Rundeck project"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Runs an ad hoc command on nodes in the specified project without requiring a pre-defined job."
+        },
+        {
+          "info": {
+            "name": "List Job Executions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://localhost:4440/api/58/job/:id/executions",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The unique ID of the job"
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Filter executions by status"
+              },
+              {
+                "name": "max",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results to return"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "Offset for pagination"
+              }
+            ]
+          },
+          "docs": "Returns a list of executions for a specific job, with optional filtering by status."
+        },
+        {
+          "info": {
+            "name": "Run a Job",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "http://localhost:4440/api/58/job/:id/executions",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The unique ID of the job"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Triggers a new execution of the specified job with optional arguments, node filter, and execution options."
+        },
+        {
+          "info": {
+            "name": "Get Execution Status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://localhost:4440/api/58/execution/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The unique ID of the execution"
+              }
+            ]
+          },
+          "docs": "Returns the current status and details of an execution by its unique ID. Use this to poll for completion of asynchronously started jobs."
+        },
+        {
+          "info": {
+            "name": "Delete an Execution",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "http://localhost:4440/api/58/execution/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The unique ID of the execution"
+              }
+            ]
+          },
+          "docs": "Deletes an execution record by its unique ID."
+        },
+        {
+          "info": {
+            "name": "Abort an Execution",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "http://localhost:4440/api/58/execution/:id/abort",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The unique ID of the execution"
+              }
+            ]
+          },
+          "docs": "Aborts a currently running execution. The execution will transition to aborted status."
+        },
+        {
+          "info": {
+            "name": "Get Execution Output Log",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://localhost:4440/api/58/execution/:id/output",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The unique ID of the execution"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "Byte offset to read from"
+              },
+              {
+                "name": "lastlines",
+                "value": "",
+                "type": "query",
+                "description": "Number of lines from end of log"
+              },
+              {
+                "name": "format",
+                "value": "",
+                "type": "query",
+                "description": "Output format"
+              }
+            ]
+          },
+          "docs": "Returns the log output for an execution in real-time or after completion. Supports streaming via offset parameter for tailing live executions."
+        },
+        {
+          "info": {
+            "name": "List Project Executions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://localhost:4440/api/58/project/:project/executions",
+            "params": [
+              {
+                "name": "project",
+                "value": "",
+                "type": "path",
+                "description": "The name of the Rundeck project"
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Filter by execution status"
+              },
+              {
+                "name": "max",
+                "value": "",
+                "type": "query",
+                "description": "Maximum results per page"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "Pagination offset"
+              }
+            ]
+          },
+          "docs": "Returns executions across all jobs in a project with optional filtering."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

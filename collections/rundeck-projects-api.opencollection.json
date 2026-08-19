@@ -1,0 +1,127 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Rundeck Projects API",
+    "version": "58"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-Rundeck-Auth-Token",
+      "value": "{{X-Rundeck-Auth-Token}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Projects",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List All Projects",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://localhost:4440/api/58/projects"
+          },
+          "docs": "Returns a list of all projects that the authenticated user has access to."
+        },
+        {
+          "info": {
+            "name": "Create a Project",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "http://localhost:4440/api/58/projects",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new Rundeck project with the specified name and configuration."
+        },
+        {
+          "info": {
+            "name": "Get Project Info",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://localhost:4440/api/58/project/:project",
+            "params": [
+              {
+                "name": "project",
+                "value": "",
+                "type": "path",
+                "description": "The name of the Rundeck project"
+              }
+            ]
+          },
+          "docs": "Returns information about a specific project including name, description, and configuration."
+        },
+        {
+          "info": {
+            "name": "Delete a Project",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "http://localhost:4440/api/58/project/:project",
+            "params": [
+              {
+                "name": "project",
+                "value": "",
+                "type": "path",
+                "description": "The name of the Rundeck project"
+              }
+            ]
+          },
+          "docs": "Permanently deletes a project and all of its associated jobs, executions, and configuration."
+        },
+        {
+          "info": {
+            "name": "List Project Executions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://localhost:4440/api/58/project/:project/executions",
+            "params": [
+              {
+                "name": "project",
+                "value": "",
+                "type": "path",
+                "description": "The name of the Rundeck project"
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Filter by execution status"
+              },
+              {
+                "name": "max",
+                "value": "",
+                "type": "query",
+                "description": "Maximum results per page"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "Pagination offset"
+              }
+            ]
+          },
+          "docs": "Returns executions across all jobs in a project with optional filtering."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

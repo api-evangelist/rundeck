@@ -1,0 +1,96 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Rundeck Tokens API",
+    "version": "58"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-Rundeck-Auth-Token",
+      "value": "{{X-Rundeck-Auth-Token}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Tokens",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List API Tokens",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://localhost:4440/api/58/tokens",
+            "params": [
+              {
+                "name": "user",
+                "value": "",
+                "type": "query",
+                "description": "Filter tokens by username (admin only)"
+              }
+            ]
+          },
+          "docs": "Returns all API tokens for the authenticated user or, if admin, for all users."
+        },
+        {
+          "info": {
+            "name": "Create an API Token",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "http://localhost:4440/api/58/tokens",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new API token for the specified user with optional roles and expiration."
+        },
+        {
+          "info": {
+            "name": "Get API Token",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://localhost:4440/api/58/token/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Returns details of a specific API token by its ID."
+        },
+        {
+          "info": {
+            "name": "Delete an API Token",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "http://localhost:4440/api/58/token/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Permanently deletes an API token by its ID."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

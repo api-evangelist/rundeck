@@ -1,0 +1,70 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Rundeck System API",
+    "version": "58"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-Rundeck-Auth-Token",
+      "value": "{{X-Rundeck-Auth-Token}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "System",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get System Info",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://localhost:4440/api/58/system/info"
+          },
+          "docs": "Returns system information about the Rundeck server including version, uptime, OS details, and JVM information."
+        },
+        {
+          "info": {
+            "name": "Get Execution Mode",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://localhost:4440/api/58/system/executions/status"
+          },
+          "docs": "Returns the current execution mode of the Rundeck server (active or passive). In passive mode, job executions are suspended."
+        },
+        {
+          "info": {
+            "name": "Enable Executions",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "http://localhost:4440/api/58/system/executions/enable"
+          },
+          "docs": "Sets the Rundeck server to active execution mode, allowing job executions to run."
+        },
+        {
+          "info": {
+            "name": "Disable Executions",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "http://localhost:4440/api/58/system/executions/disable"
+          },
+          "docs": "Sets the Rundeck server to passive mode, preventing new job executions from starting."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

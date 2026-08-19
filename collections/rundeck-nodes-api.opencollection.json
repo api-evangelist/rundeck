@@ -1,0 +1,51 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Rundeck Nodes API",
+    "version": "58"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-Rundeck-Auth-Token",
+      "value": "{{X-Rundeck-Auth-Token}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Nodes",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Project Nodes",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://localhost:4440/api/58/project/:project/nodes",
+            "params": [
+              {
+                "name": "project",
+                "value": "",
+                "type": "path",
+                "description": "The name of the Rundeck project"
+              },
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Node filter expression (e.g., \"name: webserver\")"
+              }
+            ]
+          },
+          "docs": "Returns a list of nodes associated with the project that match the optional filter."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

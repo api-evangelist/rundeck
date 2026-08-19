@@ -1,0 +1,128 @@
+openapi: 3.2.0
+info:
+  title: Rundeck Nodes API
+  description: The Rundeck REST API provides programmatic access to all Rundeck functionality including job management, execution control, project administration, node management, user management, ACL policies, system administration, and cluster operations. The current API version is 58. Rundeck is an open source runbook automation service developed by PagerDuty that enables IT teams to run automation tasks across nodes, manage self-service operations, and maintain execution history.
+  version: '58'
+  contact:
+    name: Rundeck Support
+    url: https://www.rundeck.com/support
+    email: support@rundeck.com
+  termsOfService: https://www.rundeck.com/terms-of-service
+  license:
+    name: Apache 2.0
+    url: https://github.com/rundeck/rundeck/blob/main/LICENSE
+servers:
+- url: http://localhost:4440/api/58
+  description: Local Rundeck Instance (Version 58)
+- url: https://your-rundeck-server.example.com/api/58
+  description: Production Rundeck Instance
+security:
+- tokenAuth: []
+tags:
+- name: Nodes
+  description: Query and manage nodes (target machines) associated with Rundeck projects.
+paths:
+  /project/{project}/nodes:
+    get:
+      operationId: listProjectNodes
+      summary: List Project Nodes
+      description: Returns a list of nodes associated with the project that match the optional filter.
+      tags:
+      - Nodes
+      parameters:
+      - $ref: '#/components/parameters/ProjectName'
+      - name: filter
+        in: query
+        description: 'Node filter expression (e.g., "name: webserver")'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Map of nodes keyed by node name
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  $ref: '#/components/schemas/Node'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: boolean
+          description: Always true for error responses
+        errorCode:
+          type: string
+          description: Machine-readable error code
+        message:
+          type: string
+          description: Human-readable error message
+        apiversion:
+          type: integer
+          description: API version that produced this response
+    Node:
+      type: object
+      properties:
+        nodename:
+          type: string
+          description: The node name (hostname or alias)
+        hostname:
+          type: string
+          description: The hostname or IP address
+        username:
+          type: string
+          description: Default username for SSH
+        description:
+          type: string
+          description: Node description
+        tags:
+          type: string
+          description: Comma-separated list of tags
+        osFamily:
+          type: string
+          description: OS family (unix, windows)
+        osName:
+          type: string
+          description: OS name
+        osArch:
+          type: string
+          description: OS architecture
+        osVersion:
+          type: string
+          description: OS version
+  responses:
+    Unauthorized:
+      description: Unauthorized - invalid or missing API token
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+  parameters:
+    ProjectName:
+      name: project
+      in: path
+      required: true
+      description: The name of the Rundeck project
+      schema:
+        type: string
+  securitySchemes:
+    tokenAuth:
+      type: apiKey
+      in: header
+      name: X-Rundeck-Auth-Token
+      description: API token for authentication. Obtain tokens from the Rundeck web interface under User Profile > User API Tokens or via the /api/V/tokens endpoint.
+externalDocs:
+  description: Rundeck API Documentation
+  url: https://docs.rundeck.com/docs/api/

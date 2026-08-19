@@ -1,0 +1,200 @@
+openapi: 3.2.0
+info:
+  title: Rundeck Tokens API
+  description: The Rundeck REST API provides programmatic access to all Rundeck functionality including job management, execution control, project administration, node management, user management, ACL policies, system administration, and cluster operations. The current API version is 58. Rundeck is an open source runbook automation service developed by PagerDuty that enables IT teams to run automation tasks across nodes, manage self-service operations, and maintain execution history.
+  version: '58'
+  contact:
+    name: Rundeck Support
+    url: https://www.rundeck.com/support
+    email: support@rundeck.com
+  termsOfService: https://www.rundeck.com/terms-of-service
+  license:
+    name: Apache 2.0
+    url: https://github.com/rundeck/rundeck/blob/main/LICENSE
+servers:
+- url: http://localhost:4440/api/58
+  description: Local Rundeck Instance (Version 58)
+- url: https://your-rundeck-server.example.com/api/58
+  description: Production Rundeck Instance
+security:
+- tokenAuth: []
+tags:
+- name: Tokens
+  description: Create, list, and delete API authentication tokens.
+paths:
+  /tokens:
+    get:
+      operationId: listTokens
+      summary: List API Tokens
+      description: Returns all API tokens for the authenticated user or, if admin, for all users.
+      tags:
+      - Tokens
+      parameters:
+      - name: user
+        in: query
+        description: Filter tokens by username (admin only)
+        schema:
+          type: string
+      responses:
+        '200':
+          description: List of API tokens
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Token'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      operationId: createToken
+      summary: Create an API Token
+      description: Creates a new API token for the specified user with optional roles and expiration.
+      tags:
+      - Tokens
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTokenRequest'
+      responses:
+        '201':
+          description: Token created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Token'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /token/{id}:
+    get:
+      operationId: getToken
+      summary: Get API Token
+      description: Returns details of a specific API token by its ID.
+      tags:
+      - Tokens
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Token details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Token'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      operationId: deleteToken
+      summary: Delete an API Token
+      description: Permanently deletes an API token by its ID.
+      tags:
+      - Tokens
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: Token deleted
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  schemas:
+    CreateTokenRequest:
+      type: object
+      required:
+      - user
+      properties:
+        user:
+          type: string
+          description: Username for the token
+        roles:
+          type: array
+          items:
+            type: string
+          description: Roles to assign to the token
+        duration:
+          type: string
+          description: Token duration (e.g., "30d", "1y")
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: boolean
+          description: Always true for error responses
+        errorCode:
+          type: string
+          description: Machine-readable error code
+        message:
+          type: string
+          description: Human-readable error message
+        apiversion:
+          type: integer
+          description: API version that produced this response
+    Token:
+      type: object
+      properties:
+        user:
+          type: string
+          description: Username the token belongs to
+        id:
+          type: string
+          description: Token ID
+        token:
+          type: string
+          description: The actual token value (only shown at creation)
+        roles:
+          type: array
+          items:
+            type: string
+          description: Roles assigned to this token
+        expiration:
+          type: string
+          format: date-time
+          description: Token expiration time (null if no expiration)
+        expired:
+          type: boolean
+        creator:
+          type: string
+  responses:
+    BadRequest:
+      description: Bad request - invalid parameters
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Unauthorized:
+      description: Unauthorized - invalid or missing API token
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+  securitySchemes:
+    tokenAuth:
+      type: apiKey
+      in: header
+      name: X-Rundeck-Auth-Token
+      description: API token for authentication. Obtain tokens from the Rundeck web interface under User Profile > User API Tokens or via the /api/V/tokens endpoint.
+externalDocs:
+  description: Rundeck API Documentation
+  url: https://docs.rundeck.com/docs/api/

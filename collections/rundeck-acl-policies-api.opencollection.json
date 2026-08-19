@@ -1,0 +1,76 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Rundeck ACL Policies API",
+    "version": "58"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-Rundeck-Auth-Token",
+      "value": "{{X-Rundeck-Auth-Token}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "ACL Policies",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Project ACL Policy",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://localhost:4440/api/58/project/:project/acl/:path",
+            "params": [
+              {
+                "name": "project",
+                "value": "",
+                "type": "path",
+                "description": "The name of the Rundeck project"
+              },
+              {
+                "name": "path",
+                "value": "",
+                "type": "path",
+                "description": "Path to the ACL policy file"
+              }
+            ]
+          },
+          "docs": "Returns the ACL policy document at the specified path within a project."
+        },
+        {
+          "info": {
+            "name": "Set Project ACL Policy",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "http://localhost:4440/api/58/project/:project/acl/:path",
+            "params": [
+              {
+                "name": "project",
+                "value": "",
+                "type": "path",
+                "description": "The name of the Rundeck project"
+              },
+              {
+                "name": "path",
+                "value": "",
+                "type": "path",
+                "description": "Path to the ACL policy file"
+              }
+            ]
+          },
+          "docs": "Creates or replaces an ACL policy document at the specified path within a project."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

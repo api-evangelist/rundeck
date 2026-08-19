@@ -1,0 +1,170 @@
+openapi: 3.2.0
+info:
+  title: Rundeck System API
+  description: The Rundeck REST API provides programmatic access to all Rundeck functionality including job management, execution control, project administration, node management, user management, ACL policies, system administration, and cluster operations. The current API version is 58. Rundeck is an open source runbook automation service developed by PagerDuty that enables IT teams to run automation tasks across nodes, manage self-service operations, and maintain execution history.
+  version: '58'
+  contact:
+    name: Rundeck Support
+    url: https://www.rundeck.com/support
+    email: support@rundeck.com
+  termsOfService: https://www.rundeck.com/terms-of-service
+  license:
+    name: Apache 2.0
+    url: https://github.com/rundeck/rundeck/blob/main/LICENSE
+servers:
+- url: http://localhost:4440/api/58
+  description: Local Rundeck Instance (Version 58)
+- url: https://your-rundeck-server.example.com/api/58
+  description: Production Rundeck Instance
+security:
+- tokenAuth: []
+tags:
+- name: System
+  description: Access system information, health checks, execution modes, metrics, and configuration.
+paths:
+  /system/info:
+    get:
+      operationId: getSystemInfo
+      summary: Get System Info
+      description: Returns system information about the Rundeck server including version, uptime, OS details, and JVM information.
+      tags:
+      - System
+      responses:
+        '200':
+          description: System information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SystemInfo'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /system/executions/status:
+    get:
+      operationId: getExecutionMode
+      summary: Get Execution Mode
+      description: Returns the current execution mode of the Rundeck server (active or passive). In passive mode, job executions are suspended.
+      tags:
+      - System
+      responses:
+        '200':
+          description: Current execution mode
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExecutionMode'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /system/executions/enable:
+    post:
+      operationId: enableExecutions
+      summary: Enable Executions
+      description: Sets the Rundeck server to active execution mode, allowing job executions to run.
+      tags:
+      - System
+      responses:
+        '200':
+          description: Executions enabled
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExecutionMode'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /system/executions/disable:
+    post:
+      operationId: disableExecutions
+      summary: Disable Executions
+      description: Sets the Rundeck server to passive mode, preventing new job executions from starting.
+      tags:
+      - System
+      responses:
+        '200':
+          description: Executions disabled
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExecutionMode'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+components:
+  schemas:
+    ExecutionMode:
+      type: object
+      properties:
+        executionMode:
+          type: string
+          enum:
+          - active
+          - passive
+          description: Current execution mode of the server
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: boolean
+          description: Always true for error responses
+        errorCode:
+          type: string
+          description: Machine-readable error code
+        message:
+          type: string
+          description: Human-readable error message
+        apiversion:
+          type: integer
+          description: API version that produced this response
+    SystemInfo:
+      type: object
+      properties:
+        system:
+          type: object
+          properties:
+            timestamp:
+              type: object
+              properties:
+                epoch:
+                  type: integer
+                unit:
+                  type: string
+                datetime:
+                  type: string
+                  format: date-time
+            rundeck:
+              type: object
+              properties:
+                version:
+                  type: string
+                build:
+                  type: string
+                node:
+                  type: string
+                base:
+                  type: string
+                apiversion:
+                  type: integer
+                serverUUID:
+                  type: string
+            os:
+              type: object
+              properties:
+                arch:
+                  type: string
+                name:
+                  type: string
+                version:
+                  type: string
+  responses:
+    Unauthorized:
+      description: Unauthorized - invalid or missing API token
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+  securitySchemes:
+    tokenAuth:
+      type: apiKey
+      in: header
+      name: X-Rundeck-Auth-Token
+      description: API token for authentication. Obtain tokens from the Rundeck web interface under User Profile > User API Tokens or via the /api/V/tokens endpoint.
+externalDocs:
+  description: Rundeck API Documentation
+  url: https://docs.rundeck.com/docs/api/

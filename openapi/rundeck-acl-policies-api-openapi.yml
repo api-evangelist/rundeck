@@ -1,0 +1,144 @@
+openapi: 3.2.0
+info:
+  title: Rundeck ACL Policies API
+  description: The Rundeck REST API provides programmatic access to all Rundeck functionality including job management, execution control, project administration, node management, user management, ACL policies, system administration, and cluster operations. The current API version is 58. Rundeck is an open source runbook automation service developed by PagerDuty that enables IT teams to run automation tasks across nodes, manage self-service operations, and maintain execution history.
+  version: '58'
+  contact:
+    name: Rundeck Support
+    url: https://www.rundeck.com/support
+    email: support@rundeck.com
+  termsOfService: https://www.rundeck.com/terms-of-service
+  license:
+    name: Apache 2.0
+    url: https://github.com/rundeck/rundeck/blob/main/LICENSE
+servers:
+- url: http://localhost:4440/api/58
+  description: Local Rundeck Instance (Version 58)
+- url: https://your-rundeck-server.example.com/api/58
+  description: Production Rundeck Instance
+security:
+- tokenAuth: []
+tags:
+- name: ACL Policies
+  description: Manage Access Control List (ACL) policies for fine-grained permission control.
+paths:
+  /project/{project}/acl/{path}:
+    get:
+      operationId: getProjectAclPolicy
+      summary: Get Project ACL Policy
+      description: Returns the ACL policy document at the specified path within a project.
+      tags:
+      - ACL Policies
+      parameters:
+      - $ref: '#/components/parameters/ProjectName'
+      - name: path
+        in: path
+        required: true
+        description: Path to the ACL policy file
+        schema:
+          type: string
+      responses:
+        '200':
+          description: ACL policy document
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AclPolicy'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      operationId: setProjectAclPolicy
+      summary: Set Project ACL Policy
+      description: Creates or replaces an ACL policy document at the specified path within a project.
+      tags:
+      - ACL Policies
+      parameters:
+      - $ref: '#/components/parameters/ProjectName'
+      - name: path
+        in: path
+        required: true
+        description: Path to the ACL policy file
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/yaml:
+            schema:
+              type: string
+      responses:
+        '200':
+          description: ACL policy updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AclPolicy'
+        '201':
+          description: ACL policy created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AclPolicy'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+components:
+  schemas:
+    AclPolicy:
+      type: object
+      properties:
+        path:
+          type: string
+          description: Path to the ACL policy file
+        href:
+          type: string
+          format: uri
+        contents:
+          type: string
+          description: YAML content of the ACL policy
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: boolean
+          description: Always true for error responses
+        errorCode:
+          type: string
+          description: Machine-readable error code
+        message:
+          type: string
+          description: Human-readable error message
+        apiversion:
+          type: integer
+          description: API version that produced this response
+  responses:
+    Unauthorized:
+      description: Unauthorized - invalid or missing API token
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+  parameters:
+    ProjectName:
+      name: project
+      in: path
+      required: true
+      description: The name of the Rundeck project
+      schema:
+        type: string
+  securitySchemes:
+    tokenAuth:
+      type: apiKey
+      in: header
+      name: X-Rundeck-Auth-Token
+      description: API token for authentication. Obtain tokens from the Rundeck web interface under User Profile > User API Tokens or via the /api/V/tokens endpoint.
+externalDocs:
+  description: Rundeck API Documentation
+  url: https://docs.rundeck.com/docs/api/

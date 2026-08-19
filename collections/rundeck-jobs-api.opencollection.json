@@ -1,0 +1,167 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Rundeck Jobs API",
+    "version": "58"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-Rundeck-Auth-Token",
+      "value": "{{X-Rundeck-Auth-Token}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Jobs",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Jobs for a Project",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://localhost:4440/api/58/project/:project/jobs",
+            "params": [
+              {
+                "name": "project",
+                "value": "",
+                "type": "path",
+                "description": "The name of the Rundeck project"
+              },
+              {
+                "name": "idList",
+                "value": "",
+                "type": "query",
+                "description": "Comma-separated list of Job IDs to include"
+              },
+              {
+                "name": "groupPath",
+                "value": "",
+                "type": "query",
+                "description": "Group or partial group path to filter jobs. Use \"-\" for top-level jobs only."
+              },
+              {
+                "name": "jobFilter",
+                "value": "",
+                "type": "query",
+                "description": "Filter by job name (substring match)"
+              },
+              {
+                "name": "jobExactFilter",
+                "value": "",
+                "type": "query",
+                "description": "Exact job name to match"
+              }
+            ]
+          },
+          "docs": "Returns a list of all jobs in the specified project. Can be filtered by group path, job name, or specific job IDs."
+        },
+        {
+          "info": {
+            "name": "Get Job Definition",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://localhost:4440/api/58/job/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The unique ID of the job"
+              }
+            ]
+          },
+          "docs": "Retrieves the definition and configuration of a specific job by its unique ID."
+        },
+        {
+          "info": {
+            "name": "Delete a Job",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "http://localhost:4440/api/58/job/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The unique ID of the job"
+              }
+            ]
+          },
+          "docs": "Permanently deletes a job by its unique ID."
+        },
+        {
+          "info": {
+            "name": "List Job Executions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://localhost:4440/api/58/job/:id/executions",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The unique ID of the job"
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Filter executions by status"
+              },
+              {
+                "name": "max",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results to return"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "Offset for pagination"
+              }
+            ]
+          },
+          "docs": "Returns a list of executions for a specific job, with optional filtering by status."
+        },
+        {
+          "info": {
+            "name": "Run a Job",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "http://localhost:4440/api/58/job/:id/executions",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The unique ID of the job"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Triggers a new execution of the specified job with optional arguments, node filter, and execution options."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

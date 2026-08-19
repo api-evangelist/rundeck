@@ -1,0 +1,325 @@
+openapi: 3.2.0
+info:
+  title: Rundeck Projects API
+  description: The Rundeck REST API provides programmatic access to all Rundeck functionality including job management, execution control, project administration, node management, user management, ACL policies, system administration, and cluster operations. The current API version is 58. Rundeck is an open source runbook automation service developed by PagerDuty that enables IT teams to run automation tasks across nodes, manage self-service operations, and maintain execution history.
+  version: '58'
+  contact:
+    name: Rundeck Support
+    url: https://www.rundeck.com/support
+    email: support@rundeck.com
+  termsOfService: https://www.rundeck.com/terms-of-service
+  license:
+    name: Apache 2.0
+    url: https://github.com/rundeck/rundeck/blob/main/LICENSE
+servers:
+- url: http://localhost:4440/api/58
+  description: Local Rundeck Instance (Version 58)
+- url: https://your-rundeck-server.example.com/api/58
+  description: Production Rundeck Instance
+security:
+- tokenAuth: []
+tags:
+- name: Projects
+  description: Create and manage Rundeck projects which organize jobs and node configurations.
+paths:
+  /projects:
+    get:
+      operationId: listProjects
+      summary: List All Projects
+      description: Returns a list of all projects that the authenticated user has access to.
+      tags:
+      - Projects
+      responses:
+        '200':
+          description: List of projects
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Project'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      operationId: createProject
+      summary: Create a Project
+      description: Creates a new Rundeck project with the specified name and configuration.
+      tags:
+      - Projects
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateProjectRequest'
+      responses:
+        '201':
+          description: Project created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '409':
+          description: Project already exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /project/{project}:
+    get:
+      operationId: getProject
+      summary: Get Project Info
+      description: Returns information about a specific project including name, description, and configuration.
+      tags:
+      - Projects
+      parameters:
+      - $ref: '#/components/parameters/ProjectName'
+      responses:
+        '200':
+          description: Project details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      operationId: deleteProject
+      summary: Delete a Project
+      description: Permanently deletes a project and all of its associated jobs, executions, and configuration.
+      tags:
+      - Projects
+      parameters:
+      - $ref: '#/components/parameters/ProjectName'
+      responses:
+        '204':
+          description: Project deleted successfully
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /project/{project}/executions:
+    get:
+      operationId: listProjectExecutions
+      summary: List Project Executions
+      description: Returns executions across all jobs in a project with optional filtering.
+      tags:
+      - Projects
+      parameters:
+      - $ref: '#/components/parameters/ProjectName'
+      - name: status
+        in: query
+        description: Filter by execution status
+        schema:
+          type: string
+          enum:
+          - running
+          - succeeded
+          - failed
+          - aborted
+      - name: max
+        in: query
+        description: Maximum results per page
+        schema:
+          type: integer
+          default: 20
+      - name: offset
+        in: query
+        description: Pagination offset
+        schema:
+          type: integer
+          default: 0
+      responses:
+        '200':
+          description: List of executions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExecutionList'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: boolean
+          description: Always true for error responses
+        errorCode:
+          type: string
+          description: Machine-readable error code
+        message:
+          type: string
+          description: Human-readable error message
+        apiversion:
+          type: integer
+          description: API version that produced this response
+    Project:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The unique name of the project
+        description:
+          type: string
+          description: A description of the project
+        url:
+          type: string
+          format: uri
+          description: Self-link URL for this project resource
+        config:
+          type: object
+          description: Project configuration key-value properties
+          additionalProperties:
+            type: string
+    CreateProjectRequest:
+      type: object
+      required:
+      - name
+      properties:
+        name:
+          type: string
+          description: The name for the new project
+        description:
+          type: string
+          description: Optional description for the project
+        config:
+          type: object
+          description: Initial project configuration
+          additionalProperties:
+            type: string
+    ExecutionList:
+      type: object
+      properties:
+        paging:
+          type: object
+          properties:
+            count:
+              type: integer
+            total:
+              type: integer
+            offset:
+              type: integer
+            max:
+              type: integer
+        executions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Execution'
+    Execution:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Execution ID
+        href:
+          type: string
+          format: uri
+          description: API self-link
+        permalink:
+          type: string
+          format: uri
+          description: Web UI permalink
+        status:
+          type: string
+          description: Current execution status
+          enum:
+          - running
+          - succeeded
+          - failed
+          - aborted
+          - timedout
+          - failed-with-retry
+          - scheduled
+        project:
+          type: string
+          description: Project name
+        user:
+          type: string
+          description: User who triggered the execution
+        dateStarted:
+          type: object
+          properties:
+            unixtime:
+              type: integer
+            date:
+              type: string
+              format: date-time
+        dateEnded:
+          type: object
+          properties:
+            unixtime:
+              type: integer
+            date:
+              type: string
+              format: date-time
+        job:
+          $ref: '#/components/schemas/JobReference'
+        description:
+          type: string
+        argstring:
+          type: string
+        serverUUID:
+          type: string
+    JobReference:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        group:
+          type: string
+        project:
+          type: string
+        href:
+          type: string
+          format: uri
+        permalink:
+          type: string
+          format: uri
+  responses:
+    Unauthorized:
+      description: Unauthorized - invalid or missing API token
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    BadRequest:
+      description: Bad request - invalid parameters
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+  parameters:
+    ProjectName:
+      name: project
+      in: path
+      required: true
+      description: The name of the Rundeck project
+      schema:
+        type: string
+  securitySchemes:
+    tokenAuth:
+      type: apiKey
+      in: header
+      name: X-Rundeck-Auth-Token
+      description: API token for authentication. Obtain tokens from the Rundeck web interface under User Profile > User API Tokens or via the /api/V/tokens endpoint.
+externalDocs:
+  description: Rundeck API Documentation
+  url: https://docs.rundeck.com/docs/api/

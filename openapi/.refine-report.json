@@ -1,0 +1,38 @@
+{
+  "provider": "rundeck",
+  "sources": [
+    "rundeck-acl-policies-api-openapi.yml",
+    "rundeck-executions-api-openapi.yml",
+    "rundeck-jobs-api-openapi.yml",
+    "rundeck-nodes-api-openapi.yml",
+    "rundeck-projects-api-openapi.yml",
+    "rundeck-system-api-openapi.yml",
+    "rundeck-tokens-api-openapi.yml",
+    "rundeck-users-api-openapi.yml"
+  ],
+  "outputs": [
+    "rundeck-acl-policies-api-openapi.yml",
+    "rundeck-executions-api-openapi.yml",
+    "rundeck-jobs-api-openapi.yml",
+    "rundeck-nodes-api-openapi.yml",
+    "rundeck-projects-api-openapi.yml",
+    "rundeck-system-api-openapi.yml",
+    "rundeck-tokens-api-openapi.yml",
+    "rundeck-users-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [
+    "rundeck-acl-policies-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "rundeck-executions-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "rundeck-jobs-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "rundeck-nodes-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "rundeck-projects-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "rundeck-system-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "rundeck-tokens-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "rundeck-users-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": []
+}

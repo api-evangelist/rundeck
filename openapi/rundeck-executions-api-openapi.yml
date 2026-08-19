@@ -1,0 +1,526 @@
+openapi: 3.2.0
+info:
+  title: Rundeck Executions API
+  description: The Rundeck REST API provides programmatic access to all Rundeck functionality including job management, execution control, project administration, node management, user management, ACL policies, system administration, and cluster operations. The current API version is 58. Rundeck is an open source runbook automation service developed by PagerDuty that enables IT teams to run automation tasks across nodes, manage self-service operations, and maintain execution history.
+  version: '58'
+  contact:
+    name: Rundeck Support
+    url: https://www.rundeck.com/support
+    email: support@rundeck.com
+  termsOfService: https://www.rundeck.com/terms-of-service
+  license:
+    name: Apache 2.0
+    url: https://github.com/rundeck/rundeck/blob/main/LICENSE
+servers:
+- url: http://localhost:4440/api/58
+  description: Local Rundeck Instance (Version 58)
+- url: https://your-rundeck-server.example.com/api/58
+  description: Production Rundeck Instance
+security:
+- tokenAuth: []
+tags:
+- name: Executions
+  description: Monitor running executions, retrieve execution history, and manage execution state.
+paths:
+  /project/{project}/run/command:
+    post:
+      operationId: runAdHocCommand
+      summary: Run an Ad Hoc Command
+      description: Runs an ad hoc command on nodes in the specified project without requiring a pre-defined job.
+      tags:
+      - Executions
+      parameters:
+      - $ref: '#/components/parameters/ProjectName'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdHocCommandRequest'
+      responses:
+        '200':
+          description: Command execution started
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExecutionReference'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /job/{id}/executions:
+    get:
+      operationId: listJobExecutions
+      summary: List Job Executions
+      description: Returns a list of executions for a specific job, with optional filtering by status.
+      tags:
+      - Executions
+      parameters:
+      - $ref: '#/components/parameters/JobId'
+      - name: status
+        in: query
+        description: Filter executions by status
+        schema:
+          type: string
+          enum:
+          - running
+          - succeeded
+          - failed
+          - aborted
+      - name: max
+        in: query
+        description: Maximum number of results to return
+        schema:
+          type: integer
+          default: 20
+      - name: offset
+        in: query
+        description: Offset for pagination
+        schema:
+          type: integer
+          default: 0
+      responses:
+        '200':
+          description: List of executions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExecutionList'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    post:
+      operationId: runJob
+      summary: Run a Job
+      description: Triggers a new execution of the specified job with optional arguments, node filter, and execution options.
+      tags:
+      - Executions
+      parameters:
+      - $ref: '#/components/parameters/JobId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RunJobRequest'
+      responses:
+        '200':
+          description: Job execution started
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Execution'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /execution/{id}:
+    get:
+      operationId: getExecution
+      summary: Get Execution Status
+      description: Returns the current status and details of an execution by its unique ID. Use this to poll for completion of asynchronously started jobs.
+      tags:
+      - Executions
+      parameters:
+      - $ref: '#/components/parameters/ExecutionId'
+      responses:
+        '200':
+          description: Execution status and details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Execution'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      operationId: deleteExecution
+      summary: Delete an Execution
+      description: Deletes an execution record by its unique ID.
+      tags:
+      - Executions
+      parameters:
+      - $ref: '#/components/parameters/ExecutionId'
+      responses:
+        '204':
+          description: Execution deleted
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          description: Forbidden - execution is currently running
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /execution/{id}/abort:
+    post:
+      operationId: abortExecution
+      summary: Abort an Execution
+      description: Aborts a currently running execution. The execution will transition to aborted status.
+      tags:
+      - Executions
+      parameters:
+      - $ref: '#/components/parameters/ExecutionId'
+      responses:
+        '200':
+          description: Abort request submitted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbortResult'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /execution/{id}/output:
+    get:
+      operationId: getExecutionOutput
+      summary: Get Execution Output Log
+      description: Returns the log output for an execution in real-time or after completion. Supports streaming via offset parameter for tailing live executions.
+      tags:
+      - Executions
+      parameters:
+      - $ref: '#/components/parameters/ExecutionId'
+      - name: offset
+        in: query
+        description: Byte offset to read from
+        schema:
+          type: integer
+          default: 0
+      - name: lastlines
+        in: query
+        description: Number of lines from end of log
+        schema:
+          type: integer
+      - name: format
+        in: query
+        description: Output format
+        schema:
+          type: string
+          enum:
+          - text
+          - json
+      responses:
+        '200':
+          description: Execution log output
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExecutionOutput'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /project/{project}/executions:
+    get:
+      operationId: listProjectExecutions
+      summary: List Project Executions
+      description: Returns executions across all jobs in a project with optional filtering.
+      tags:
+      - Executions
+      parameters:
+      - $ref: '#/components/parameters/ProjectName'
+      - name: status
+        in: query
+        description: Filter by execution status
+        schema:
+          type: string
+          enum:
+          - running
+          - succeeded
+          - failed
+          - aborted
+      - name: max
+        in: query
+        description: Maximum results per page
+        schema:
+          type: integer
+          default: 20
+      - name: offset
+        in: query
+        description: Pagination offset
+        schema:
+          type: integer
+          default: 0
+      responses:
+        '200':
+          description: List of executions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExecutionList'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  parameters:
+    ExecutionId:
+      name: id
+      in: path
+      required: true
+      description: The unique ID of the execution
+      schema:
+        type: string
+    ProjectName:
+      name: project
+      in: path
+      required: true
+      description: The name of the Rundeck project
+      schema:
+        type: string
+    JobId:
+      name: id
+      in: path
+      required: true
+      description: The unique ID of the job
+      schema:
+        type: string
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: boolean
+          description: Always true for error responses
+        errorCode:
+          type: string
+          description: Machine-readable error code
+        message:
+          type: string
+          description: Human-readable error message
+        apiversion:
+          type: integer
+          description: API version that produced this response
+    JobReference:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        group:
+          type: string
+        project:
+          type: string
+        href:
+          type: string
+          format: uri
+        permalink:
+          type: string
+          format: uri
+    ExecutionReference:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Execution ID
+        permalink:
+          type: string
+          format: uri
+        href:
+          type: string
+          format: uri
+        status:
+          type: string
+    ExecutionList:
+      type: object
+      properties:
+        paging:
+          type: object
+          properties:
+            count:
+              type: integer
+            total:
+              type: integer
+            offset:
+              type: integer
+            max:
+              type: integer
+        executions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Execution'
+    ExecutionOutput:
+      type: object
+      properties:
+        id:
+          type: string
+        offset:
+          type: string
+        completed:
+          type: boolean
+        execCompleted:
+          type: boolean
+        hasFailedNodes:
+          type: boolean
+        execState:
+          type: string
+        lastModified:
+          type: string
+        execDuration:
+          type: integer
+        entries:
+          type: array
+          items:
+            type: object
+            properties:
+              time:
+                type: string
+              level:
+                type: string
+              log:
+                type: string
+              user:
+                type: string
+              node:
+                type: string
+    Execution:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Execution ID
+        href:
+          type: string
+          format: uri
+          description: API self-link
+        permalink:
+          type: string
+          format: uri
+          description: Web UI permalink
+        status:
+          type: string
+          description: Current execution status
+          enum:
+          - running
+          - succeeded
+          - failed
+          - aborted
+          - timedout
+          - failed-with-retry
+          - scheduled
+        project:
+          type: string
+          description: Project name
+        user:
+          type: string
+          description: User who triggered the execution
+        dateStarted:
+          type: object
+          properties:
+            unixtime:
+              type: integer
+            date:
+              type: string
+              format: date-time
+        dateEnded:
+          type: object
+          properties:
+            unixtime:
+              type: integer
+            date:
+              type: string
+              format: date-time
+        job:
+          $ref: '#/components/schemas/JobReference'
+        description:
+          type: string
+        argstring:
+          type: string
+        serverUUID:
+          type: string
+    RunJobRequest:
+      type: object
+      properties:
+        argString:
+          type: string
+          description: Job argument string (e.g., "-option1 value1 -option2 value2")
+        loglevel:
+          type: string
+          description: Override log level for this execution
+          enum:
+          - DEBUG
+          - VERBOSE
+          - INFO
+          - WARN
+          - ERROR
+        asUser:
+          type: string
+          description: Run as this user (requires admin)
+        filter:
+          type: string
+          description: Node filter expression to override job's default nodes
+        runAtTime:
+          type: string
+          format: date-time
+          description: Schedule this execution for a future time
+    AbortResult:
+      type: object
+      properties:
+        abort:
+          type: object
+          properties:
+            status:
+              type: string
+              enum:
+              - aborted
+              - failed
+              - pending
+            reason:
+              type: string
+        execution:
+          $ref: '#/components/schemas/ExecutionReference'
+    AdHocCommandRequest:
+      type: object
+      required:
+      - exec
+      properties:
+        exec:
+          type: string
+          description: The command to execute on target nodes
+        filter:
+          type: string
+          description: Node filter expression
+        loglevel:
+          type: string
+          description: Log level for the command execution
+          enum:
+          - DEBUG
+          - VERBOSE
+          - INFO
+          - WARN
+          - ERROR
+  responses:
+    BadRequest:
+      description: Bad request - invalid parameters
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Unauthorized:
+      description: Unauthorized - invalid or missing API token
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+  securitySchemes:
+    tokenAuth:
+      type: apiKey
+      in: header
+      name: X-Rundeck-Auth-Token
+      description: API token for authentication. Obtain tokens from the Rundeck web interface under User Profile > User API Tokens or via the /api/V/tokens endpoint.
+externalDocs:
+  description: Rundeck API Documentation
+  url: https://docs.rundeck.com/docs/api/

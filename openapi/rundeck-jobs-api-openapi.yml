@@ -1,0 +1,383 @@
+openapi: 3.2.0
+info:
+  title: Rundeck Jobs API
+  description: The Rundeck REST API provides programmatic access to all Rundeck functionality including job management, execution control, project administration, node management, user management, ACL policies, system administration, and cluster operations. The current API version is 58. Rundeck is an open source runbook automation service developed by PagerDuty that enables IT teams to run automation tasks across nodes, manage self-service operations, and maintain execution history.
+  version: '58'
+  contact:
+    name: Rundeck Support
+    url: https://www.rundeck.com/support
+    email: support@rundeck.com
+  termsOfService: https://www.rundeck.com/terms-of-service
+  license:
+    name: Apache 2.0
+    url: https://github.com/rundeck/rundeck/blob/main/LICENSE
+servers:
+- url: http://localhost:4440/api/58
+  description: Local Rundeck Instance (Version 58)
+- url: https://your-rundeck-server.example.com/api/58
+  description: Production Rundeck Instance
+security:
+- tokenAuth: []
+tags:
+- name: Jobs
+  description: List, create, import, export, run, and delete automation jobs.
+paths:
+  /project/{project}/jobs:
+    get:
+      operationId: listJobs
+      summary: List Jobs for a Project
+      description: Returns a list of all jobs in the specified project. Can be filtered by group path, job name, or specific job IDs.
+      tags:
+      - Jobs
+      parameters:
+      - $ref: '#/components/parameters/ProjectName'
+      - name: idList
+        in: query
+        description: Comma-separated list of Job IDs to include
+        schema:
+          type: string
+      - name: groupPath
+        in: query
+        description: Group or partial group path to filter jobs. Use "-" for top-level jobs only.
+        schema:
+          type: string
+          default: '*'
+      - name: jobFilter
+        in: query
+        description: Filter by job name (substring match)
+        schema:
+          type: string
+      - name: jobExactFilter
+        in: query
+        description: Exact job name to match
+        schema:
+          type: string
+      responses:
+        '200':
+          description: List of jobs
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Job'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /job/{id}:
+    get:
+      operationId: getJobDefinition
+      summary: Get Job Definition
+      description: Retrieves the definition and configuration of a specific job by its unique ID.
+      tags:
+      - Jobs
+      parameters:
+      - $ref: '#/components/parameters/JobId'
+      responses:
+        '200':
+          description: Job definition
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Job'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      operationId: deleteJob
+      summary: Delete a Job
+      description: Permanently deletes a job by its unique ID.
+      tags:
+      - Jobs
+      parameters:
+      - $ref: '#/components/parameters/JobId'
+      responses:
+        '204':
+          description: Job deleted successfully
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /job/{id}/executions:
+    get:
+      operationId: listJobExecutions
+      summary: List Job Executions
+      description: Returns a list of executions for a specific job, with optional filtering by status.
+      tags:
+      - Jobs
+      parameters:
+      - $ref: '#/components/parameters/JobId'
+      - name: status
+        in: query
+        description: Filter executions by status
+        schema:
+          type: string
+          enum:
+          - running
+          - succeeded
+          - failed
+          - aborted
+      - name: max
+        in: query
+        description: Maximum number of results to return
+        schema:
+          type: integer
+          default: 20
+      - name: offset
+        in: query
+        description: Offset for pagination
+        schema:
+          type: integer
+          default: 0
+      responses:
+        '200':
+          description: List of executions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExecutionList'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    post:
+      operationId: runJob
+      summary: Run a Job
+      description: Triggers a new execution of the specified job with optional arguments, node filter, and execution options.
+      tags:
+      - Jobs
+      parameters:
+      - $ref: '#/components/parameters/JobId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RunJobRequest'
+      responses:
+        '200':
+          description: Job execution started
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Execution'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  schemas:
+    Job:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique job ID (UUID)
+        name:
+          type: string
+          description: The job name
+        group:
+          type: string
+          description: The job group path (e.g., "ops/deploy")
+        project:
+          type: string
+          description: The project this job belongs to
+        description:
+          type: string
+          description: Job description
+        href:
+          type: string
+          format: uri
+          description: API self-link URL
+        permalink:
+          type: string
+          format: uri
+          description: Web UI permalink
+        scheduled:
+          type: boolean
+          description: Whether the job has a schedule
+        scheduleEnabled:
+          type: boolean
+          description: Whether the schedule is active
+        enabled:
+          type: boolean
+          description: Whether the job is enabled
+        averageDuration:
+          type: integer
+          description: Average execution duration in milliseconds
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: boolean
+          description: Always true for error responses
+        errorCode:
+          type: string
+          description: Machine-readable error code
+        message:
+          type: string
+          description: Human-readable error message
+        apiversion:
+          type: integer
+          description: API version that produced this response
+    JobReference:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        group:
+          type: string
+        project:
+          type: string
+        href:
+          type: string
+          format: uri
+        permalink:
+          type: string
+          format: uri
+    ExecutionList:
+      type: object
+      properties:
+        paging:
+          type: object
+          properties:
+            count:
+              type: integer
+            total:
+              type: integer
+            offset:
+              type: integer
+            max:
+              type: integer
+        executions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Execution'
+    Execution:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Execution ID
+        href:
+          type: string
+          format: uri
+          description: API self-link
+        permalink:
+          type: string
+          format: uri
+          description: Web UI permalink
+        status:
+          type: string
+          description: Current execution status
+          enum:
+          - running
+          - succeeded
+          - failed
+          - aborted
+          - timedout
+          - failed-with-retry
+          - scheduled
+        project:
+          type: string
+          description: Project name
+        user:
+          type: string
+          description: User who triggered the execution
+        dateStarted:
+          type: object
+          properties:
+            unixtime:
+              type: integer
+            date:
+              type: string
+              format: date-time
+        dateEnded:
+          type: object
+          properties:
+            unixtime:
+              type: integer
+            date:
+              type: string
+              format: date-time
+        job:
+          $ref: '#/components/schemas/JobReference'
+        description:
+          type: string
+        argstring:
+          type: string
+        serverUUID:
+          type: string
+    RunJobRequest:
+      type: object
+      properties:
+        argString:
+          type: string
+          description: Job argument string (e.g., "-option1 value1 -option2 value2")
+        loglevel:
+          type: string
+          description: Override log level for this execution
+          enum:
+          - DEBUG
+          - VERBOSE
+          - INFO
+          - WARN
+          - ERROR
+        asUser:
+          type: string
+          description: Run as this user (requires admin)
+        filter:
+          type: string
+          description: Node filter expression to override job's default nodes
+        runAtTime:
+          type: string
+          format: date-time
+          description: Schedule this execution for a future time
+  responses:
+    BadRequest:
+      description: Bad request - invalid parameters
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Unauthorized:
+      description: Unauthorized - invalid or missing API token
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+  parameters:
+    ProjectName:
+      name: project
+      in: path
+      required: true
+      description: The name of the Rundeck project
+      schema:
+        type: string
+    JobId:
+      name: id
+      in: path
+      required: true
+      description: The unique ID of the job
+      schema:
+        type: string
+  securitySchemes:
+    tokenAuth:
+      type: apiKey
+      in: header
+      name: X-Rundeck-Auth-Token
+      description: API token for authentication. Obtain tokens from the Rundeck web interface under User Profile > User API Tokens or via the /api/V/tokens endpoint.
+externalDocs:
+  description: Rundeck API Documentation
+  url: https://docs.rundeck.com/docs/api/
