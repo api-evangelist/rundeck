@@ -28,6 +28,15 @@ tags:
   - DevOps
   - Job Scheduling
   - Orchestration
+  - Workflows
+  - Runbook
+  - Open-Source
+  - IT Operations
+tags_raw:
+  - Automation
+  - DevOps
+  - Job Scheduling
+  - Orchestration
   - Workflow
   - Runbook
   - Open Source
@@ -71,6 +80,8 @@ apis:
   humanURL: https://docs.rundeck.com/docs/api/
   baseURL: http://localhost:4440/api
   tags:
+  - Execution
+  tags_raw:
   - Executions
   properties:
   - type: OpenAPI
@@ -99,6 +110,8 @@ apis:
   humanURL: https://docs.rundeck.com/docs/api/
   baseURL: http://localhost:4440/api
   tags:
+  - Job
+  tags_raw:
   - Jobs
   properties:
   - type: OpenAPI
@@ -155,6 +168,8 @@ apis:
   humanURL: https://docs.rundeck.com/docs/api/
   baseURL: http://localhost:4440/api
   tags:
+  - Project
+  tags_raw:
   - Projects
   properties:
   - type: OpenAPI
@@ -239,6 +254,8 @@ apis:
   humanURL: https://docs.rundeck.com/docs/api/
   baseURL: http://localhost:4440/api
   tags:
+  - User
+  tags_raw:
   - Users
   properties:
   - type: OpenAPI
