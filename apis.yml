@@ -8,6 +8,19 @@ description: >-
   Jenkins, Ansible, Chef, and Puppet. The REST API is versioned and supports authentication via API tokens,
   password-based session tokens, and JWT (commercial).
 type: Index
+deliveryModel:
+  model: unknown
+  open_source: unknown
+  commercial: true
+  callable_host: false
+  label: Delivery model not determined — needs a product licence on record
+  confidence: low
+  source:
+  - openapi
+  - pricing
+  - repository-unlicensed
+  generated: '2026-08-28'
+  method: derived
 accessModel:
   pricing: freemium
   onboarding: unknown
@@ -279,6 +292,11 @@ apis:
   - type: JSONLD
     url: json-ld/rundeck-context.jsonld
 common:
+  - type: CapabilityMap
+    url: capabilities/rundeck-capability-edges.yml
+    name: Rundeck Business Capability Map
+  - type: IssueTracker
+    url: https://github.com/rundeck/rundeck-api-specs/issues
   - type: DomainSecurity
     url: security/rundeck-domain-security.yml
   - type: LinkedIn

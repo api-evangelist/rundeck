@@ -1,0 +1,48 @@
+slug: rundeck
+provider: Rundeck
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Banking & Capital Markets
+- Software & Technology
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 3
+edges:
+- tag: Executions
+  spec_file: rundeck-executions-api-openapi.yml
+  capability_id: BC-600.40
+  capability_id_l1: BC-600
+  capability_name: IT Operations Management
+  confidence: 0.8
+  evidence: POST /project/{project}/run/command runAdHocCommand 'Run an Ad Hoc Command'; 'Abort an Execution';
+    'Get Execution Output Log' — runbook automation across nodes
+  reason: Rundeck executions are runs of IT automation/runbook tasks across nodes, with status, output
+    logs and abort control. That is day-to-day IT operations automation (BC-600.40), not any business-domain
+    execution.
+- tag: ACL Policies
+  spec_file: rundeck-acl-policies-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.75
+  evidence: 'GET /project/{project}/acl/{path}  getProjectAclPolicy  Get Project ACL Policy; PUT ... setProjectAclPolicy;
+    schemas: AclPolicy'
+  reason: Operations read and write access-control policy documents governing who may act on Rundeck projects
+    — authorisation policy administration, i.e. identity and access management for an IT automation tool.
+    Could arguably be read as tooling configuration, hence not maximal confidence.
+- tag: Jobs
+  spec_file: rundeck-jobs-api-openapi.yml
+  capability_id: BC-600.40
+  capability_id_l1: BC-600
+  capability_name: IT Operations Management
+  confidence: 0.75
+  evidence: GET /project/{project}/jobs 'List Jobs for a Project'; 'Get Job Definition'; 'Run a Job' —
+    'run automation tasks across nodes ... job scheduling'
+  reason: Jobs here are runbook automation job definitions and their scheduled/triggered runs — IT operations
+    automation tooling. Not HR jobs, not batch business processes.
