@@ -153,6 +153,8 @@ apis:
   humanURL: https://docs.rundeck.com/docs/api/
   baseURL: http://localhost:4440/api
   tags:
+  - Node
+  tags_raw:
   - Nodes
   properties:
   - type: OpenAPI
