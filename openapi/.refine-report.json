@@ -1,14 +1,7 @@
 {
   "provider": "rundeck",
   "sources": [
-    "rundeck-acl-policies-api-openapi.yml",
-    "rundeck-executions-api-openapi.yml",
-    "rundeck-jobs-api-openapi.yml",
-    "rundeck-nodes-api-openapi.yml",
-    "rundeck-projects-api-openapi.yml",
-    "rundeck-system-api-openapi.yml",
-    "rundeck-tokens-api-openapi.yml",
-    "rundeck-users-api-openapi.yml"
+    "_original/rundeck-openapi.yml"
   ],
   "outputs": [
     "rundeck-acl-policies-api-openapi.yml",
@@ -24,15 +17,18 @@
   "errors": [],
   "warnings": [],
   "notes": [
-    "rundeck-acl-policies-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
-    "rundeck-executions-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
-    "rundeck-jobs-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
-    "rundeck-nodes-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
-    "rundeck-projects-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
-    "rundeck-system-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
-    "rundeck-tokens-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
-    "rundeck-users-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "rundeck-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
     "apis.yml register: already-registered"
   ],
-  "skipped": []
+  "skipped": [
+    "rundeck-acl-policies-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "rundeck-executions-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "rundeck-jobs-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "rundeck-nodes-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "rundeck-projects-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "rundeck-system-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "rundeck-tokens-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "rundeck-users-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }

@@ -259,93 +259,7 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 components:
-  parameters:
-    ExecutionId:
-      name: id
-      in: path
-      required: true
-      description: The unique ID of the execution
-      schema:
-        type: string
-    ProjectName:
-      name: project
-      in: path
-      required: true
-      description: The name of the Rundeck project
-      schema:
-        type: string
-    JobId:
-      name: id
-      in: path
-      required: true
-      description: The unique ID of the job
-      schema:
-        type: string
   schemas:
-    ErrorResponse:
-      type: object
-      properties:
-        error:
-          type: boolean
-          description: Always true for error responses
-        errorCode:
-          type: string
-          description: Machine-readable error code
-        message:
-          type: string
-          description: Human-readable error message
-        apiversion:
-          type: integer
-          description: API version that produced this response
-    JobReference:
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        group:
-          type: string
-        project:
-          type: string
-        href:
-          type: string
-          format: uri
-        permalink:
-          type: string
-          format: uri
-    ExecutionReference:
-      type: object
-      properties:
-        id:
-          type: integer
-          description: Execution ID
-        permalink:
-          type: string
-          format: uri
-        href:
-          type: string
-          format: uri
-        status:
-          type: string
-    ExecutionList:
-      type: object
-      properties:
-        paging:
-          type: object
-          properties:
-            count:
-              type: integer
-            total:
-              type: integer
-            offset:
-              type: integer
-            max:
-              type: integer
-        executions:
-          type: array
-          items:
-            $ref: '#/components/schemas/Execution'
     ExecutionOutput:
       type: object
       properties:
@@ -380,6 +294,131 @@ components:
                 type: string
               node:
                 type: string
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: boolean
+          description: Always true for error responses
+        errorCode:
+          type: string
+          description: Machine-readable error code
+        message:
+          type: string
+          description: Human-readable error message
+        apiversion:
+          type: integer
+          description: API version that produced this response
+    RunJobRequest:
+      type: object
+      properties:
+        argString:
+          type: string
+          description: Job argument string (e.g., "-option1 value1 -option2 value2")
+        loglevel:
+          type: string
+          description: Override log level for this execution
+          enum:
+          - DEBUG
+          - VERBOSE
+          - INFO
+          - WARN
+          - ERROR
+        asUser:
+          type: string
+          description: Run as this user (requires admin)
+        filter:
+          type: string
+          description: Node filter expression to override job's default nodes
+        runAtTime:
+          type: string
+          format: date-time
+          description: Schedule this execution for a future time
+    JobReference:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        group:
+          type: string
+        project:
+          type: string
+        href:
+          type: string
+          format: uri
+        permalink:
+          type: string
+          format: uri
+    AdHocCommandRequest:
+      type: object
+      required:
+      - exec
+      properties:
+        exec:
+          type: string
+          description: The command to execute on target nodes
+        filter:
+          type: string
+          description: Node filter expression
+        loglevel:
+          type: string
+          description: Log level for the command execution
+          enum:
+          - DEBUG
+          - VERBOSE
+          - INFO
+          - WARN
+          - ERROR
+    ExecutionReference:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Execution ID
+        permalink:
+          type: string
+          format: uri
+        href:
+          type: string
+          format: uri
+        status:
+          type: string
+    AbortResult:
+      type: object
+      properties:
+        abort:
+          type: object
+          properties:
+            status:
+              type: string
+              enum:
+              - aborted
+              - failed
+              - pending
+            reason:
+              type: string
+        execution:
+          $ref: '#/components/schemas/ExecutionReference'
+    ExecutionList:
+      type: object
+      properties:
+        paging:
+          type: object
+          properties:
+            count:
+              type: integer
+            total:
+              type: integer
+            offset:
+              type: integer
+            max:
+              type: integer
+        executions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Execution'
     Execution:
       type: object
       properties:
@@ -435,67 +474,28 @@ components:
           type: string
         serverUUID:
           type: string
-    RunJobRequest:
-      type: object
-      properties:
-        argString:
-          type: string
-          description: Job argument string (e.g., "-option1 value1 -option2 value2")
-        loglevel:
-          type: string
-          description: Override log level for this execution
-          enum:
-          - DEBUG
-          - VERBOSE
-          - INFO
-          - WARN
-          - ERROR
-        asUser:
-          type: string
-          description: Run as this user (requires admin)
-        filter:
-          type: string
-          description: Node filter expression to override job's default nodes
-        runAtTime:
-          type: string
-          format: date-time
-          description: Schedule this execution for a future time
-    AbortResult:
-      type: object
-      properties:
-        abort:
-          type: object
-          properties:
-            status:
-              type: string
-              enum:
-              - aborted
-              - failed
-              - pending
-            reason:
-              type: string
-        execution:
-          $ref: '#/components/schemas/ExecutionReference'
-    AdHocCommandRequest:
-      type: object
-      required:
-      - exec
-      properties:
-        exec:
-          type: string
-          description: The command to execute on target nodes
-        filter:
-          type: string
-          description: Node filter expression
-        loglevel:
-          type: string
-          description: Log level for the command execution
-          enum:
-          - DEBUG
-          - VERBOSE
-          - INFO
-          - WARN
-          - ERROR
+  parameters:
+    ProjectName:
+      name: project
+      in: path
+      required: true
+      description: The name of the Rundeck project
+      schema:
+        type: string
+    ExecutionId:
+      name: id
+      in: path
+      required: true
+      description: The unique ID of the execution
+      schema:
+        type: string
+    JobId:
+      name: id
+      in: path
+      required: true
+      description: The unique ID of the job
+      schema:
+        type: string
   responses:
     BadRequest:
       description: Bad request - invalid parameters
