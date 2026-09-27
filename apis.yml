@@ -9,17 +9,22 @@ description: >-
   password-based session tokens, and JWT (commercial).
 type: Index
 deliveryModel:
-  model: unknown
-  open_source: unknown
+  model: open-core
+  license: Apache-2.0
+  license_evidence:
+    repo: rundeck/rundeck
+    spdx: Apache-2.0
+    stars: 6311
+  open_source: true
   commercial: true
   callable_host: false
-  label: Delivery model not determined — needs a product licence on record
-  confidence: low
+  label: Open core · an OSS project plus a commercial hosted product
+  confidence: medium
   source:
   - openapi
   - pricing
-  - repository-unlicensed
-  generated: '2026-08-28'
+  - repository-license
+  generated: '2026-09-25'
   method: derived
 accessModel:
   pricing: freemium
@@ -43,8 +48,9 @@ tags:
   - Orchestration
   - Workflows
   - Runbook
-  - Open-Source
+  - Open Source
   - IT Operations
+  - Scheduling
 tags_raw:
   - Automation
   - DevOps
@@ -54,6 +60,8 @@ tags_raw:
   - Runbook
   - Open Source
   - IT Operations
+  - Open-Source
+  - Scheduling
 url: https://raw.githubusercontent.com/api-evangelist/rundeck/refs/heads/main/apis.yml
 created: '2024-01-01'
 modified: '2026-05-02'

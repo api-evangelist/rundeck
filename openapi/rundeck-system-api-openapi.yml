@@ -103,6 +103,15 @@ components:
         apiversion:
           type: integer
           description: API version that produced this response
+    ExecutionMode:
+      type: object
+      properties:
+        executionMode:
+          type: string
+          enum:
+          - active
+          - passive
+          description: Current execution mode of the server
     SystemInfo:
       type: object
       properties:
@@ -143,15 +152,6 @@ components:
                   type: string
                 version:
                   type: string
-    ExecutionMode:
-      type: object
-      properties:
-        executionMode:
-          type: string
-          enum:
-          - active
-          - passive
-          description: Current execution mode of the server
   responses:
     Unauthorized:
       description: Unauthorized - invalid or missing API token
