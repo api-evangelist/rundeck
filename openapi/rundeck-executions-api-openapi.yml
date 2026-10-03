@@ -260,6 +260,99 @@ paths:
           $ref: '#/components/responses/NotFound'
 components:
   schemas:
+    ExecutionReference:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Execution ID
+        permalink:
+          type: string
+          format: uri
+        href:
+          type: string
+          format: uri
+        status:
+          type: string
+    AdHocCommandRequest:
+      type: object
+      required:
+      - exec
+      properties:
+        exec:
+          type: string
+          description: The command to execute on target nodes
+        filter:
+          type: string
+          description: Node filter expression
+        loglevel:
+          type: string
+          description: Log level for the command execution
+          enum:
+          - DEBUG
+          - VERBOSE
+          - INFO
+          - WARN
+          - ERROR
+    ExecutionOutput:
+      type: object
+      properties:
+        id:
+          type: string
+        offset:
+          type: string
+        completed:
+          type: boolean
+        execCompleted:
+          type: boolean
+        hasFailedNodes:
+          type: boolean
+        execState:
+          type: string
+        lastModified:
+          type: string
+        execDuration:
+          type: integer
+        entries:
+          type: array
+          items:
+            type: object
+            properties:
+              time:
+                type: string
+              level:
+                type: string
+              log:
+                type: string
+              user:
+                type: string
+              node:
+                type: string
+    RunJobRequest:
+      type: object
+      properties:
+        argString:
+          type: string
+          description: Job argument string (e.g., "-option1 value1 -option2 value2")
+        loglevel:
+          type: string
+          description: Override log level for this execution
+          enum:
+          - DEBUG
+          - VERBOSE
+          - INFO
+          - WARN
+          - ERROR
+        asUser:
+          type: string
+          description: Run as this user (requires admin)
+        filter:
+          type: string
+          description: Node filter expression to override job's default nodes
+        runAtTime:
+          type: string
+          format: date-time
+          description: Schedule this execution for a future time
     Execution:
       type: object
       properties:
@@ -315,54 +408,6 @@ components:
           type: string
         serverUUID:
           type: string
-    ExecutionOutput:
-      type: object
-      properties:
-        id:
-          type: string
-        offset:
-          type: string
-        completed:
-          type: boolean
-        execCompleted:
-          type: boolean
-        hasFailedNodes:
-          type: boolean
-        execState:
-          type: string
-        lastModified:
-          type: string
-        execDuration:
-          type: integer
-        entries:
-          type: array
-          items:
-            type: object
-            properties:
-              time:
-                type: string
-              level:
-                type: string
-              log:
-                type: string
-              user:
-                type: string
-              node:
-                type: string
-    ExecutionReference:
-      type: object
-      properties:
-        id:
-          type: integer
-          description: Execution ID
-        permalink:
-          type: string
-          format: uri
-        href:
-          type: string
-          format: uri
-        status:
-          type: string
     ErrorResponse:
       type: object
       properties:
@@ -412,51 +457,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Execution'
-    AdHocCommandRequest:
-      type: object
-      required:
-      - exec
-      properties:
-        exec:
-          type: string
-          description: The command to execute on target nodes
-        filter:
-          type: string
-          description: Node filter expression
-        loglevel:
-          type: string
-          description: Log level for the command execution
-          enum:
-          - DEBUG
-          - VERBOSE
-          - INFO
-          - WARN
-          - ERROR
-    RunJobRequest:
-      type: object
-      properties:
-        argString:
-          type: string
-          description: Job argument string (e.g., "-option1 value1 -option2 value2")
-        loglevel:
-          type: string
-          description: Override log level for this execution
-          enum:
-          - DEBUG
-          - VERBOSE
-          - INFO
-          - WARN
-          - ERROR
-        asUser:
-          type: string
-          description: Run as this user (requires admin)
-        filter:
-          type: string
-          description: Node filter expression to override job's default nodes
-        runAtTime:
-          type: string
-          format: date-time
-          description: Schedule this execution for a future time
     JobReference:
       type: object
       properties:
@@ -497,14 +497,14 @@ components:
       schema:
         type: string
   responses:
-    NotFound:
-      description: Resource not found
+    BadRequest:
+      description: Bad request - invalid parameters
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorResponse'
-    BadRequest:
-      description: Bad request - invalid parameters
+    NotFound:
+      description: Resource not found
       content:
         application/json:
           schema:

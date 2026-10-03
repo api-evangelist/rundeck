@@ -51,6 +51,21 @@ paths:
           $ref: '#/components/responses/NotFound'
 components:
   schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: boolean
+          description: Always true for error responses
+        errorCode:
+          type: string
+          description: Machine-readable error code
+        message:
+          type: string
+          description: Human-readable error message
+        apiversion:
+          type: integer
+          description: API version that produced this response
     Node:
       type: object
       properties:
@@ -81,21 +96,6 @@ components:
         osVersion:
           type: string
           description: OS version
-    ErrorResponse:
-      type: object
-      properties:
-        error:
-          type: boolean
-          description: Always true for error responses
-        errorCode:
-          type: string
-          description: Machine-readable error code
-        message:
-          type: string
-          description: Human-readable error message
-        apiversion:
-          type: integer
-          description: API version that produced this response
   responses:
     NotFound:
       description: Resource not found

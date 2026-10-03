@@ -170,6 +170,31 @@ paths:
           $ref: '#/components/responses/NotFound'
 components:
   schemas:
+    RunJobRequest:
+      type: object
+      properties:
+        argString:
+          type: string
+          description: Job argument string (e.g., "-option1 value1 -option2 value2")
+        loglevel:
+          type: string
+          description: Override log level for this execution
+          enum:
+          - DEBUG
+          - VERBOSE
+          - INFO
+          - WARN
+          - ERROR
+        asUser:
+          type: string
+          description: Run as this user (requires admin)
+        filter:
+          type: string
+          description: Node filter expression to override job's default nodes
+        runAtTime:
+          type: string
+          format: date-time
+          description: Schedule this execution for a future time
     Execution:
       type: object
       properties:
@@ -296,31 +321,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Execution'
-    RunJobRequest:
-      type: object
-      properties:
-        argString:
-          type: string
-          description: Job argument string (e.g., "-option1 value1 -option2 value2")
-        loglevel:
-          type: string
-          description: Override log level for this execution
-          enum:
-          - DEBUG
-          - VERBOSE
-          - INFO
-          - WARN
-          - ERROR
-        asUser:
-          type: string
-          description: Run as this user (requires admin)
-        filter:
-          type: string
-          description: Node filter expression to override job's default nodes
-        runAtTime:
-          type: string
-          format: date-time
-          description: Schedule this execution for a future time
     JobReference:
       type: object
       properties:
@@ -339,14 +339,14 @@ components:
           type: string
           format: uri
   responses:
-    NotFound:
-      description: Resource not found
+    BadRequest:
+      description: Bad request - invalid parameters
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorResponse'
-    BadRequest:
-      description: Bad request - invalid parameters
+    NotFound:
+      description: Resource not found
       content:
         application/json:
           schema:

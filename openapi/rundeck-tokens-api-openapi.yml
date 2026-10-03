@@ -114,22 +114,21 @@ paths:
           $ref: '#/components/responses/NotFound'
 components:
   schemas:
-    CreateTokenRequest:
+    ErrorResponse:
       type: object
-      required:
-      - user
       properties:
-        user:
+        error:
+          type: boolean
+          description: Always true for error responses
+        errorCode:
           type: string
-          description: Username for the token
-        roles:
-          type: array
-          items:
-            type: string
-          description: Roles to assign to the token
-        duration:
+          description: Machine-readable error code
+        message:
           type: string
-          description: Token duration (e.g., "30d", "1y")
+          description: Human-readable error message
+        apiversion:
+          type: integer
+          description: API version that produced this response
     Token:
       type: object
       properties:
@@ -155,30 +154,31 @@ components:
           type: boolean
         creator:
           type: string
-    ErrorResponse:
+    CreateTokenRequest:
       type: object
+      required:
+      - user
       properties:
-        error:
-          type: boolean
-          description: Always true for error responses
-        errorCode:
+        user:
           type: string
-          description: Machine-readable error code
-        message:
+          description: Username for the token
+        roles:
+          type: array
+          items:
+            type: string
+          description: Roles to assign to the token
+        duration:
           type: string
-          description: Human-readable error message
-        apiversion:
-          type: integer
-          description: API version that produced this response
+          description: Token duration (e.g., "30d", "1y")
   responses:
-    NotFound:
-      description: Resource not found
+    BadRequest:
+      description: Bad request - invalid parameters
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorResponse'
-    BadRequest:
-      description: Bad request - invalid parameters
+    NotFound:
+      description: Resource not found
       content:
         application/json:
           schema:

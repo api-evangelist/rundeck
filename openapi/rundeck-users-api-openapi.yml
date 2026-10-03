@@ -94,6 +94,16 @@ components:
         apiversion:
           type: integer
           description: API version that produced this response
+    UserUpdateRequest:
+      type: object
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+          format: email
     User:
       type: object
       properties:
@@ -119,16 +129,6 @@ components:
         tokens:
           type: integer
           description: Number of API tokens for this user
-    UserUpdateRequest:
-      type: object
-      properties:
-        firstName:
-          type: string
-        lastName:
-          type: string
-        email:
-          type: string
-          format: email
   responses:
     Unauthorized:
       description: Unauthorized - invalid or missing API token
