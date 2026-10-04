@@ -169,7 +169,77 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 components:
+  parameters:
+    JobId:
+      name: id
+      in: path
+      required: true
+      description: The unique ID of the job
+      schema:
+        type: string
+    ProjectName:
+      name: project
+      in: path
+      required: true
+      description: The name of the Rundeck project
+      schema:
+        type: string
   schemas:
+    JobReference:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        group:
+          type: string
+        project:
+          type: string
+        href:
+          type: string
+          format: uri
+        permalink:
+          type: string
+          format: uri
+    Job:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique job ID (UUID)
+        name:
+          type: string
+          description: The job name
+        group:
+          type: string
+          description: The job group path (e.g., "ops/deploy")
+        project:
+          type: string
+          description: The project this job belongs to
+        description:
+          type: string
+          description: Job description
+        href:
+          type: string
+          format: uri
+          description: API self-link URL
+        permalink:
+          type: string
+          format: uri
+          description: Web UI permalink
+        scheduled:
+          type: boolean
+          description: Whether the job has a schedule
+        scheduleEnabled:
+          type: boolean
+          description: Whether the schedule is active
+        enabled:
+          type: boolean
+          description: Whether the job is enabled
+        averageDuration:
+          type: integer
+          description: Average execution duration in milliseconds
     RunJobRequest:
       type: object
       properties:
@@ -195,6 +265,39 @@ components:
           type: string
           format: date-time
           description: Schedule this execution for a future time
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: boolean
+          description: Always true for error responses
+        errorCode:
+          type: string
+          description: Machine-readable error code
+        message:
+          type: string
+          description: Human-readable error message
+        apiversion:
+          type: integer
+          description: API version that produced this response
+    ExecutionList:
+      type: object
+      properties:
+        paging:
+          type: object
+          properties:
+            count:
+              type: integer
+            total:
+              type: integer
+            offset:
+              type: integer
+            max:
+              type: integer
+        executions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Execution'
     Execution:
       type: object
       properties:
@@ -250,95 +353,13 @@ components:
           type: string
         serverUUID:
           type: string
-    Job:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Unique job ID (UUID)
-        name:
-          type: string
-          description: The job name
-        group:
-          type: string
-          description: The job group path (e.g., "ops/deploy")
-        project:
-          type: string
-          description: The project this job belongs to
-        description:
-          type: string
-          description: Job description
-        href:
-          type: string
-          format: uri
-          description: API self-link URL
-        permalink:
-          type: string
-          format: uri
-          description: Web UI permalink
-        scheduled:
-          type: boolean
-          description: Whether the job has a schedule
-        scheduleEnabled:
-          type: boolean
-          description: Whether the schedule is active
-        enabled:
-          type: boolean
-          description: Whether the job is enabled
-        averageDuration:
-          type: integer
-          description: Average execution duration in milliseconds
-    ErrorResponse:
-      type: object
-      properties:
-        error:
-          type: boolean
-          description: Always true for error responses
-        errorCode:
-          type: string
-          description: Machine-readable error code
-        message:
-          type: string
-          description: Human-readable error message
-        apiversion:
-          type: integer
-          description: API version that produced this response
-    ExecutionList:
-      type: object
-      properties:
-        paging:
-          type: object
-          properties:
-            count:
-              type: integer
-            total:
-              type: integer
-            offset:
-              type: integer
-            max:
-              type: integer
-        executions:
-          type: array
-          items:
-            $ref: '#/components/schemas/Execution'
-    JobReference:
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        group:
-          type: string
-        project:
-          type: string
-        href:
-          type: string
-          format: uri
-        permalink:
-          type: string
-          format: uri
   responses:
+    Unauthorized:
+      description: Unauthorized - invalid or missing API token
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
     BadRequest:
       description: Bad request - invalid parameters
       content:
@@ -351,27 +372,6 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorResponse'
-    Unauthorized:
-      description: Unauthorized - invalid or missing API token
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-  parameters:
-    ProjectName:
-      name: project
-      in: path
-      required: true
-      description: The name of the Rundeck project
-      schema:
-        type: string
-    JobId:
-      name: id
-      in: path
-      required: true
-      description: The unique ID of the job
-      schema:
-        type: string
   securitySchemes:
     tokenAuth:
       type: apiKey

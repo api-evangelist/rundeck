@@ -148,6 +148,90 @@ paths:
           $ref: '#/components/responses/NotFound'
 components:
   schemas:
+    JobReference:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        group:
+          type: string
+        project:
+          type: string
+        href:
+          type: string
+          format: uri
+        permalink:
+          type: string
+          format: uri
+    CreateProjectRequest:
+      type: object
+      required:
+      - name
+      properties:
+        name:
+          type: string
+          description: The name for the new project
+        description:
+          type: string
+          description: Optional description for the project
+        config:
+          type: object
+          description: Initial project configuration
+          additionalProperties:
+            type: string
+    Project:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The unique name of the project
+        description:
+          type: string
+          description: A description of the project
+        url:
+          type: string
+          format: uri
+          description: Self-link URL for this project resource
+        config:
+          type: object
+          description: Project configuration key-value properties
+          additionalProperties:
+            type: string
+    ExecutionList:
+      type: object
+      properties:
+        paging:
+          type: object
+          properties:
+            count:
+              type: integer
+            total:
+              type: integer
+            offset:
+              type: integer
+            max:
+              type: integer
+        executions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Execution'
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: boolean
+          description: Always true for error responses
+        errorCode:
+          type: string
+          description: Machine-readable error code
+        message:
+          type: string
+          description: Human-readable error message
+        apiversion:
+          type: integer
+          description: API version that produced this response
     Execution:
       type: object
       properties:
@@ -203,93 +287,9 @@ components:
           type: string
         serverUUID:
           type: string
-    ErrorResponse:
-      type: object
-      properties:
-        error:
-          type: boolean
-          description: Always true for error responses
-        errorCode:
-          type: string
-          description: Machine-readable error code
-        message:
-          type: string
-          description: Human-readable error message
-        apiversion:
-          type: integer
-          description: API version that produced this response
-    Project:
-      type: object
-      properties:
-        name:
-          type: string
-          description: The unique name of the project
-        description:
-          type: string
-          description: A description of the project
-        url:
-          type: string
-          format: uri
-          description: Self-link URL for this project resource
-        config:
-          type: object
-          description: Project configuration key-value properties
-          additionalProperties:
-            type: string
-    ExecutionList:
-      type: object
-      properties:
-        paging:
-          type: object
-          properties:
-            count:
-              type: integer
-            total:
-              type: integer
-            offset:
-              type: integer
-            max:
-              type: integer
-        executions:
-          type: array
-          items:
-            $ref: '#/components/schemas/Execution'
-    CreateProjectRequest:
-      type: object
-      required:
-      - name
-      properties:
-        name:
-          type: string
-          description: The name for the new project
-        description:
-          type: string
-          description: Optional description for the project
-        config:
-          type: object
-          description: Initial project configuration
-          additionalProperties:
-            type: string
-    JobReference:
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        group:
-          type: string
-        project:
-          type: string
-        href:
-          type: string
-          format: uri
-        permalink:
-          type: string
-          format: uri
   responses:
-    BadRequest:
-      description: Bad request - invalid parameters
+    Unauthorized:
+      description: Unauthorized - invalid or missing API token
       content:
         application/json:
           schema:
@@ -300,8 +300,8 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorResponse'
-    Unauthorized:
-      description: Unauthorized - invalid or missing API token
+    BadRequest:
+      description: Bad request - invalid parameters
       content:
         application/json:
           schema:

@@ -259,21 +259,62 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 components:
+  parameters:
+    JobId:
+      name: id
+      in: path
+      required: true
+      description: The unique ID of the job
+      schema:
+        type: string
+    ProjectName:
+      name: project
+      in: path
+      required: true
+      description: The name of the Rundeck project
+      schema:
+        type: string
+    ExecutionId:
+      name: id
+      in: path
+      required: true
+      description: The unique ID of the execution
+      schema:
+        type: string
   schemas:
-    ExecutionReference:
+    AbortResult:
+      type: object
+      properties:
+        abort:
+          type: object
+          properties:
+            status:
+              type: string
+              enum:
+              - aborted
+              - failed
+              - pending
+            reason:
+              type: string
+        execution:
+          $ref: '#/components/schemas/ExecutionReference'
+    JobReference:
       type: object
       properties:
         id:
-          type: integer
-          description: Execution ID
-        permalink:
           type: string
-          format: uri
+        name:
+          type: string
+        group:
+          type: string
+        project:
+          type: string
         href:
           type: string
           format: uri
-        status:
+        permalink:
           type: string
+          format: uri
     AdHocCommandRequest:
       type: object
       required:
@@ -328,6 +369,20 @@ components:
                 type: string
               node:
                 type: string
+    ExecutionReference:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Execution ID
+        permalink:
+          type: string
+          format: uri
+        href:
+          type: string
+          format: uri
+        status:
+          type: string
     RunJobRequest:
       type: object
       properties:
@@ -353,6 +408,39 @@ components:
           type: string
           format: date-time
           description: Schedule this execution for a future time
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: boolean
+          description: Always true for error responses
+        errorCode:
+          type: string
+          description: Machine-readable error code
+        message:
+          type: string
+          description: Human-readable error message
+        apiversion:
+          type: integer
+          description: API version that produced this response
+    ExecutionList:
+      type: object
+      properties:
+        paging:
+          type: object
+          properties:
+            count:
+              type: integer
+            total:
+              type: integer
+            offset:
+              type: integer
+            max:
+              type: integer
+        executions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Execution'
     Execution:
       type: object
       properties:
@@ -408,95 +496,13 @@ components:
           type: string
         serverUUID:
           type: string
-    ErrorResponse:
-      type: object
-      properties:
-        error:
-          type: boolean
-          description: Always true for error responses
-        errorCode:
-          type: string
-          description: Machine-readable error code
-        message:
-          type: string
-          description: Human-readable error message
-        apiversion:
-          type: integer
-          description: API version that produced this response
-    AbortResult:
-      type: object
-      properties:
-        abort:
-          type: object
-          properties:
-            status:
-              type: string
-              enum:
-              - aborted
-              - failed
-              - pending
-            reason:
-              type: string
-        execution:
-          $ref: '#/components/schemas/ExecutionReference'
-    ExecutionList:
-      type: object
-      properties:
-        paging:
-          type: object
-          properties:
-            count:
-              type: integer
-            total:
-              type: integer
-            offset:
-              type: integer
-            max:
-              type: integer
-        executions:
-          type: array
-          items:
-            $ref: '#/components/schemas/Execution'
-    JobReference:
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        group:
-          type: string
-        project:
-          type: string
-        href:
-          type: string
-          format: uri
-        permalink:
-          type: string
-          format: uri
-  parameters:
-    ExecutionId:
-      name: id
-      in: path
-      required: true
-      description: The unique ID of the execution
-      schema:
-        type: string
-    ProjectName:
-      name: project
-      in: path
-      required: true
-      description: The name of the Rundeck project
-      schema:
-        type: string
-    JobId:
-      name: id
-      in: path
-      required: true
-      description: The unique ID of the job
-      schema:
-        type: string
   responses:
+    Unauthorized:
+      description: Unauthorized - invalid or missing API token
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
     BadRequest:
       description: Bad request - invalid parameters
       content:
@@ -505,12 +511,6 @@ components:
             $ref: '#/components/schemas/ErrorResponse'
     NotFound:
       description: Resource not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-    Unauthorized:
-      description: Unauthorized - invalid or missing API token
       content:
         application/json:
           schema:
