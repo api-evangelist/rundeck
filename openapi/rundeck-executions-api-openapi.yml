@@ -260,11 +260,11 @@ paths:
           $ref: '#/components/responses/NotFound'
 components:
   parameters:
-    JobId:
+    ExecutionId:
       name: id
       in: path
       required: true
-      description: The unique ID of the job
+      description: The unique ID of the execution
       schema:
         type: string
     ProjectName:
@@ -274,11 +274,11 @@ components:
       description: The name of the Rundeck project
       schema:
         type: string
-    ExecutionId:
+    JobId:
       name: id
       in: path
       required: true
-      description: The unique ID of the execution
+      description: The unique ID of the job
       schema:
         type: string
   schemas:
@@ -298,23 +298,6 @@ components:
               type: string
         execution:
           $ref: '#/components/schemas/ExecutionReference'
-    JobReference:
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        group:
-          type: string
-        project:
-          type: string
-        href:
-          type: string
-          format: uri
-        permalink:
-          type: string
-          format: uri
     AdHocCommandRequest:
       type: object
       required:
@@ -335,6 +318,41 @@ components:
           - INFO
           - WARN
           - ERROR
+    ExecutionList:
+      type: object
+      properties:
+        paging:
+          type: object
+          properties:
+            count:
+              type: integer
+            total:
+              type: integer
+            offset:
+              type: integer
+            max:
+              type: integer
+        executions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Execution'
+    JobReference:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        group:
+          type: string
+        project:
+          type: string
+        href:
+          type: string
+          format: uri
+        permalink:
+          type: string
+          format: uri
     ExecutionOutput:
       type: object
       properties:
@@ -369,45 +387,6 @@ components:
                 type: string
               node:
                 type: string
-    ExecutionReference:
-      type: object
-      properties:
-        id:
-          type: integer
-          description: Execution ID
-        permalink:
-          type: string
-          format: uri
-        href:
-          type: string
-          format: uri
-        status:
-          type: string
-    RunJobRequest:
-      type: object
-      properties:
-        argString:
-          type: string
-          description: Job argument string (e.g., "-option1 value1 -option2 value2")
-        loglevel:
-          type: string
-          description: Override log level for this execution
-          enum:
-          - DEBUG
-          - VERBOSE
-          - INFO
-          - WARN
-          - ERROR
-        asUser:
-          type: string
-          description: Run as this user (requires admin)
-        filter:
-          type: string
-          description: Node filter expression to override job's default nodes
-        runAtTime:
-          type: string
-          format: date-time
-          description: Schedule this execution for a future time
     ErrorResponse:
       type: object
       properties:
@@ -423,24 +402,6 @@ components:
         apiversion:
           type: integer
           description: API version that produced this response
-    ExecutionList:
-      type: object
-      properties:
-        paging:
-          type: object
-          properties:
-            count:
-              type: integer
-            total:
-              type: integer
-            offset:
-              type: integer
-            max:
-              type: integer
-        executions:
-          type: array
-          items:
-            $ref: '#/components/schemas/Execution'
     Execution:
       type: object
       properties:
@@ -496,15 +457,54 @@ components:
           type: string
         serverUUID:
           type: string
+    RunJobRequest:
+      type: object
+      properties:
+        argString:
+          type: string
+          description: Job argument string (e.g., "-option1 value1 -option2 value2")
+        loglevel:
+          type: string
+          description: Override log level for this execution
+          enum:
+          - DEBUG
+          - VERBOSE
+          - INFO
+          - WARN
+          - ERROR
+        asUser:
+          type: string
+          description: Run as this user (requires admin)
+        filter:
+          type: string
+          description: Node filter expression to override job's default nodes
+        runAtTime:
+          type: string
+          format: date-time
+          description: Schedule this execution for a future time
+    ExecutionReference:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Execution ID
+        permalink:
+          type: string
+          format: uri
+        href:
+          type: string
+          format: uri
+        status:
+          type: string
   responses:
-    Unauthorized:
-      description: Unauthorized - invalid or missing API token
+    BadRequest:
+      description: Bad request - invalid parameters
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorResponse'
-    BadRequest:
-      description: Bad request - invalid parameters
+    Unauthorized:
+      description: Unauthorized - invalid or missing API token
       content:
         application/json:
           schema:

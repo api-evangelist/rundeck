@@ -170,13 +170,6 @@ paths:
           $ref: '#/components/responses/NotFound'
 components:
   parameters:
-    JobId:
-      name: id
-      in: path
-      required: true
-      description: The unique ID of the job
-      schema:
-        type: string
     ProjectName:
       name: project
       in: path
@@ -184,24 +177,51 @@ components:
       description: The name of the Rundeck project
       schema:
         type: string
+    JobId:
+      name: id
+      in: path
+      required: true
+      description: The unique ID of the job
+      schema:
+        type: string
+  responses:
+    BadRequest:
+      description: Bad request - invalid parameters
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Unauthorized:
+      description: Unauthorized - invalid or missing API token
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
   schemas:
-    JobReference:
+    ExecutionList:
       type: object
       properties:
-        id:
-          type: string
-        name:
-          type: string
-        group:
-          type: string
-        project:
-          type: string
-        href:
-          type: string
-          format: uri
-        permalink:
-          type: string
-          format: uri
+        paging:
+          type: object
+          properties:
+            count:
+              type: integer
+            total:
+              type: integer
+            offset:
+              type: integer
+            max:
+              type: integer
+        executions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Execution'
     Job:
       type: object
       properties:
@@ -240,31 +260,23 @@ components:
         averageDuration:
           type: integer
           description: Average execution duration in milliseconds
-    RunJobRequest:
+    JobReference:
       type: object
       properties:
-        argString:
+        id:
           type: string
-          description: Job argument string (e.g., "-option1 value1 -option2 value2")
-        loglevel:
+        name:
           type: string
-          description: Override log level for this execution
-          enum:
-          - DEBUG
-          - VERBOSE
-          - INFO
-          - WARN
-          - ERROR
-        asUser:
+        group:
           type: string
-          description: Run as this user (requires admin)
-        filter:
+        project:
           type: string
-          description: Node filter expression to override job's default nodes
-        runAtTime:
+        href:
           type: string
-          format: date-time
-          description: Schedule this execution for a future time
+          format: uri
+        permalink:
+          type: string
+          format: uri
     ErrorResponse:
       type: object
       properties:
@@ -280,24 +292,6 @@ components:
         apiversion:
           type: integer
           description: API version that produced this response
-    ExecutionList:
-      type: object
-      properties:
-        paging:
-          type: object
-          properties:
-            count:
-              type: integer
-            total:
-              type: integer
-            offset:
-              type: integer
-            max:
-              type: integer
-        executions:
-          type: array
-          items:
-            $ref: '#/components/schemas/Execution'
     Execution:
       type: object
       properties:
@@ -353,25 +347,31 @@ components:
           type: string
         serverUUID:
           type: string
-  responses:
-    Unauthorized:
-      description: Unauthorized - invalid or missing API token
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-    BadRequest:
-      description: Bad request - invalid parameters
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-    NotFound:
-      description: Resource not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
+    RunJobRequest:
+      type: object
+      properties:
+        argString:
+          type: string
+          description: Job argument string (e.g., "-option1 value1 -option2 value2")
+        loglevel:
+          type: string
+          description: Override log level for this execution
+          enum:
+          - DEBUG
+          - VERBOSE
+          - INFO
+          - WARN
+          - ERROR
+        asUser:
+          type: string
+          description: Run as this user (requires admin)
+        filter:
+          type: string
+          description: Node filter expression to override job's default nodes
+        runAtTime:
+          type: string
+          format: date-time
+          description: Schedule this execution for a future time
   securitySchemes:
     tokenAuth:
       type: apiKey

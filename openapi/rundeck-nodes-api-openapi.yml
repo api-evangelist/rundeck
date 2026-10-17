@@ -50,6 +50,14 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 components:
+  parameters:
+    ProjectName:
+      name: project
+      in: path
+      required: true
+      description: The name of the Rundeck project
+      schema:
+        type: string
   responses:
     Unauthorized:
       description: Unauthorized - invalid or missing API token
@@ -63,14 +71,6 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorResponse'
-  parameters:
-    ProjectName:
-      name: project
-      in: path
-      required: true
-      description: The name of the Rundeck project
-      schema:
-        type: string
   schemas:
     Node:
       type: object
