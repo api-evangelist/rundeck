@@ -74,5 +74,5 @@
     - connectors/applications/rundeck
     vendor_link: https://www.rundeck.com/
     builder: Fivetran
-  status: pending-generation
+  status: not-a-workflow
   arazzo: null
